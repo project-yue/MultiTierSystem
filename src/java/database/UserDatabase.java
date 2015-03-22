@@ -64,8 +64,9 @@ public class UserDatabase {
     public void createUserTable() {
         try {
             Statement statement = conn.createStatement();
-            String sqlCreate = "CREATE TABLE " + this.usr_tbl + "(ID VARCHAR(25) NOT NULL, NAME VARCHAR(30),"
-                    + " PWD VARCHAR(10) NOT NULL, PRIMARY KEY (ID))";
+            String sqlCreate = "CREATE TABLE " + this.usr_tbl + "(" + this.usr_tbl_credentials[0]
+                    + " VARCHAR(25) NOT NULL, " + this.usr_tbl_credentials[1] + " VARCHAR(30),"
+                    + " " + this.usr_tbl_credentials[2] + " VARCHAR(10) NOT NULL, PRIMARY KEY (ID))";
             statement.executeUpdate(sqlCreate);
             System.out.println("User Table created");
         } catch (SQLException ex) {
@@ -79,7 +80,7 @@ public class UserDatabase {
             String sqlCreate = "CREATE TABLE " + this.item_tbl + "(" + this.item_tbl_credentials[0]
                     + " INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
                     + " " + this.item_tbl_credentials[1] + " VARCHAR(30), " + this.item_tbl_credentials[2]
-                    + " DECIMAL(16, 2), " + this.item_tbl_credentials[3] + "BOOLEAN)";
+                    + " DECIMAL(16, 2), " + this.item_tbl_credentials[3] + " BOOLEAN)";
             statement.executeUpdate(sqlCreate);
         } catch (SQLException ex) {
             Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
@@ -116,7 +117,7 @@ public class UserDatabase {
         } catch (SQLException ex) {
             Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return result;
     }
 
@@ -131,7 +132,8 @@ public class UserDatabase {
         boolean isPasswordValid = false;
         try {
             Statement statement = this.conn.createStatement();
-            String selectAccountPwd = "SELECT PWD from " + this.usr_tbl + " where ID = '" + account + "'";
+            String selectAccountPwd = "SELECT " + this.usr_tbl_credentials[2]
+                    + " from " + this.usr_tbl + " where ID = '" + account + "'";
             ResultSet rs = statement.executeQuery(selectAccountPwd);
             while (rs.next()) {
                 if (rs.getString(1).equals(password)) {
