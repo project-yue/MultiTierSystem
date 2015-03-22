@@ -14,20 +14,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * A database organizes the user accounts
+ * Database features
  *
  * @author Yue Li
  */
 public class UserDatabase {
 
-    private String url = "jdbc:derby://localhost:1527/demo1;create=true";
-    private String usernameDerby = "name";
-    private String passwordDerby = "password";
-    private String usr_tbl = "DB_User";
-    private String[] usr_tbl_credentials = {"ID", "NAME", "PWD"};
-    private String item_tbl = "DB_Item";
-    private String[] item_tbl_credentials = {"ID", "NAME", "PRICE", "ACTIVE"};
-    Connection conn;
+    private final String URL = "jdbc:derby://localhost:1527/demo1;create=true";
+    private final String USR_TBL_NAME = "DB_User";
+    private final String[] USR_TBL_ATTRIBUTES = {"ID", "NAME", "PWD"};
+    private final String ITEM_TBL = "DB_Item";
+    private final String[] ITEM_TBL_ATTRIBUTES = {"ID", "NAME", "PRICE", "ACTIVE"};
+    private Connection conn;
 
     public static void main(String[] args) {
         UserDatabase db = new UserDatabase();
@@ -50,8 +48,8 @@ public class UserDatabase {
      */
     public void establishConnection() {
         try {
-            conn = DriverManager.getConnection(url);
-            System.out.println(url + "   connected....");
+            conn = DriverManager.getConnection(URL);
+            System.out.println(URL + "   connected....");
         } catch (SQLException ex) {
             Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -64,9 +62,9 @@ public class UserDatabase {
     public void createUserTable() {
         try {
             Statement statement = conn.createStatement();
-            String sqlCreate = "CREATE TABLE " + this.usr_tbl + "(" + this.usr_tbl_credentials[0]
-                    + " VARCHAR(25) NOT NULL, " + this.usr_tbl_credentials[1] + " VARCHAR(30),"
-                    + " " + this.usr_tbl_credentials[2] + " VARCHAR(10) NOT NULL, PRIMARY KEY (ID))";
+            String sqlCreate = "CREATE TABLE " + this.USR_TBL_NAME + "(" + this.USR_TBL_ATTRIBUTES[0]
+                    + " VARCHAR(25) NOT NULL, " + this.USR_TBL_ATTRIBUTES[1] + " VARCHAR(30),"
+                    + " " + this.USR_TBL_ATTRIBUTES[2] + " VARCHAR(10) NOT NULL, PRIMARY KEY (ID))";
             statement.executeUpdate(sqlCreate);
             System.out.println("User Table created");
         } catch (SQLException ex) {
@@ -77,10 +75,10 @@ public class UserDatabase {
     public void createItemTable() {
         try {
             Statement statement = conn.createStatement();
-            String sqlCreate = "CREATE TABLE " + this.item_tbl + "(" + this.item_tbl_credentials[0]
+            String sqlCreate = "CREATE TABLE " + this.ITEM_TBL + "(" + this.ITEM_TBL_ATTRIBUTES[0]
                     + " INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
-                    + " " + this.item_tbl_credentials[1] + " VARCHAR(30), " + this.item_tbl_credentials[2]
-                    + " DECIMAL(16, 2), " + this.item_tbl_credentials[3] + " BOOLEAN)";
+                    + " " + this.ITEM_TBL_ATTRIBUTES[1] + " VARCHAR(30), " + this.ITEM_TBL_ATTRIBUTES[2]
+                    + " DECIMAL(16, 2), " + this.ITEM_TBL_ATTRIBUTES[3] + " BOOLEAN)";
             statement.executeUpdate(sqlCreate);
         } catch (SQLException ex) {
             Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
@@ -91,7 +89,7 @@ public class UserDatabase {
         boolean result = false;
         try {
             DatabaseMetaData dbm = conn.getMetaData();
-            ResultSet tables = dbm.getTables(null, null, this.item_tbl.toUpperCase(), null);
+            ResultSet tables = dbm.getTables(null, null, this.ITEM_TBL.toUpperCase(), null);
             if (tables.next()) {
                 result = true;
             }
@@ -110,7 +108,7 @@ public class UserDatabase {
         boolean result = false;
         try {
             DatabaseMetaData dbm = conn.getMetaData();
-            ResultSet tables = dbm.getTables(null, null, this.usr_tbl.toUpperCase(), null);
+            ResultSet tables = dbm.getTables(null, null, this.USR_TBL_NAME.toUpperCase(), null);
             if (tables.next()) {
                 result = true;
             }
@@ -132,8 +130,8 @@ public class UserDatabase {
         boolean isPasswordValid = false;
         try {
             Statement statement = this.conn.createStatement();
-            String selectAccountPwd = "SELECT " + this.usr_tbl_credentials[2]
-                    + " from " + this.usr_tbl + " where ID = '" + account + "'";
+            String selectAccountPwd = "SELECT " + this.USR_TBL_ATTRIBUTES[2]
+                    + " from " + this.USR_TBL_NAME + " where ID = '" + account + "'";
             ResultSet rs = statement.executeQuery(selectAccountPwd);
             while (rs.next()) {
                 if (rs.getString(1).equals(password)) {
@@ -156,7 +154,7 @@ public class UserDatabase {
         boolean isFound = false;
         try {
             Statement statement = conn.createStatement();
-            String selectComm = "SELECT ID from " + this.usr_tbl + " where ID = '" + accountName + "'";
+            String selectComm = "SELECT ID from " + this.USR_TBL_NAME + " where ID = '" + accountName + "'";
             ResultSet rs = statement.executeQuery(selectComm);
             while (rs.next()) {
                 if (rs.getString(1).equals(accountName)) {
@@ -179,7 +177,7 @@ public class UserDatabase {
     public void addNewUser(String userId, String userName, String pwd) {
         try {
             Statement statement = conn.createStatement();
-            String sqlUpdate = "INSERT INTO " + this.usr_tbl + " values("
+            String sqlUpdate = "INSERT INTO " + this.USR_TBL_NAME + " values("
                     + " '" + userId + "' , '" + userName + "' , '" + pwd + "')";
             statement.executeUpdate(sqlUpdate);
             statement.close();
@@ -200,7 +198,7 @@ public class UserDatabase {
         int wins = -1;
         try {
             Statement st = conn.createStatement();
-            String sqlUpdate = "select WINS from " + this.usr_tbl + " where ID = '" + userName + "'";
+            String sqlUpdate = "select WINS from " + this.USR_TBL_NAME + " where ID = '" + userName + "'";
             ResultSet rs = st.executeQuery(sqlUpdate);
             while (rs.next()) {
                 wins = rs.getInt("WINS");
@@ -223,7 +221,7 @@ public class UserDatabase {
         currentWins++;
         try {
             Statement st = conn.createStatement();
-            String sqlUpdate = "update " + this.usr_tbl + " set WINS = " + currentWins + " where ID = '" + userName + "'";
+            String sqlUpdate = "update " + this.USR_TBL_NAME + " set WINS = " + currentWins + " where ID = '" + userName + "'";
             st.executeUpdate(sqlUpdate);
         } catch (SQLException ex) {
             Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
