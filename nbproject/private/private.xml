@@ -6,8 +6,11 @@
             <file>file:/home/mk29/Yue/StudyAUT/2015/sem1/DSM/assignments/MultiTier/src/java/database/UserDatabase.java</file>
         </group>
         <group>
+            <file>file:/home/mk29/Yue/StudyAUT/2015/sem1/DSM/assignments/MultiTier/src/java/servlet/WelcomeServlet.java</file>
             <file>file:/home/mk29/Yue/StudyAUT/2015/sem1/DSM/assignments/MultiTier/src/java/database/UserDatabase.java</file>
-            <file>file:/home/mk29/Yue/StudyAUT/2015/sem1/DSM/assignments/MultiTier/.git/config</file>
+            <file>file:/home/mk29/Yue/StudyAUT/2015/sem1/DSM/assignments/MultiTier/web/index.jsp</file>
+            <file>file:/home/mk29/Yue/StudyAUT/2015/sem1/DSM/assignments/MultiTier/src/java/servlet/CustomerServlet.java</file>
+            <file>file:/home/mk29/Yue/StudyAUT/2015/sem1/DSM/assignments/MultiTier/src/java/beans/CustomerBean.java</file>
         </group>
     </open-files>
 </project-private>

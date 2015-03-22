@@ -20,9 +20,9 @@ import java.util.logging.Logger;
  */
 public class UserDatabase {
 
-    private final String URL = "jdbc:derby://localhost:1527/demo1;create=true";
+    private final String URL = "jdbc:derby://localhost:1527/ass1DB;create=true";
     private final String USR_TBL_NAME = "DB_User";
-    private final String[] USR_TBL_ATTRIBUTES = {"ID", "NAME", "PWD"};
+    private final String[] USR_TBL_ATTRIBUTES = {"ID", "NAME", "PWD", "PURCHASE", "SALES"};
     private final String ITEM_TBL = "DB_Item";
     private final String[] ITEM_TBL_ATTRIBUTES = {"ID", "NAME", "PRICE", "ACTIVE"};
     private Connection conn;
@@ -41,6 +41,18 @@ public class UserDatabase {
         } else {
             db.addNewUser("hello", "hello", "hello");
         }
+
+        String[] test = db.getUserTradeRecords("hello");
+        System.out.println("Hello! " + test[1] + ", You have sold " + test[4]
+                + " , and bought " + test[3] + "item(s)");
+        db.incrementCounter("hello", db.USR_TBL_ATTRIBUTES[3]);
+        test = db.getUserTradeRecords("hello");
+        System.out.println("Hello! " + test[1] + ", You have sold " + test[4]
+                + " , and bought " + test[3] + "item(s)");
+        db.incrementCounter("hello", db.USR_TBL_ATTRIBUTES[4]);
+        test = db.getUserTradeRecords("hello");
+        System.out.println("Hello! " + test[1] + ", You have sold " + test[4]
+                + " , and bought " + test[3] + "item(s)");
     }
 
     /**
@@ -53,18 +65,19 @@ public class UserDatabase {
         } catch (SQLException ex) {
             Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     /**
      * create user account table
      */
-    public void createUserTable() {
+    private void createUserTable() {
         try {
             Statement statement = conn.createStatement();
             String sqlCreate = "CREATE TABLE " + this.USR_TBL_NAME + "(" + this.USR_TBL_ATTRIBUTES[0]
                     + " VARCHAR(25) NOT NULL, " + this.USR_TBL_ATTRIBUTES[1] + " VARCHAR(30),"
-                    + " " + this.USR_TBL_ATTRIBUTES[2] + " VARCHAR(10) NOT NULL, PRIMARY KEY (ID))";
+                    + " " + this.USR_TBL_ATTRIBUTES[2] + " VARCHAR(16) NOT NULL,"
+                    + " " + this.USR_TBL_ATTRIBUTES[3] + " INTEGER, " + this.USR_TBL_ATTRIBUTES[4]
+                    + " INTEGER," + " PRIMARY KEY (ID))";
             statement.executeUpdate(sqlCreate);
             System.out.println("User Table created");
         } catch (SQLException ex) {
@@ -72,7 +85,7 @@ public class UserDatabase {
         }
     }
 
-    public void createItemTable() {
+    private void createItemTable() {
         try {
             Statement statement = conn.createStatement();
             String sqlCreate = "CREATE TABLE " + this.ITEM_TBL + "(" + this.ITEM_TBL_ATTRIBUTES[0]
@@ -85,7 +98,7 @@ public class UserDatabase {
         }
     }
 
-    public boolean doesItemTableExist() {
+    private boolean doesItemTableExist() {
         boolean result = false;
         try {
             DatabaseMetaData dbm = conn.getMetaData();
@@ -104,7 +117,7 @@ public class UserDatabase {
      *
      * @return true the user is a returning player, false otherwise
      */
-    public boolean doesUserTableExist() {
+    private boolean doesUserTableExist() {
         boolean result = false;
         try {
             DatabaseMetaData dbm = conn.getMetaData();
@@ -154,7 +167,9 @@ public class UserDatabase {
         boolean isFound = false;
         try {
             Statement statement = conn.createStatement();
-            String selectComm = "SELECT ID from " + this.USR_TBL_NAME + " where ID = '" + accountName + "'";
+            String selectComm = "SELECT " + this.USR_TBL_ATTRIBUTES[0]
+                    + " from " + this.USR_TBL_NAME + " where "
+                    + this.USR_TBL_ATTRIBUTES[0] + " = '" + accountName + "'";
             ResultSet rs = statement.executeQuery(selectComm);
             while (rs.next()) {
                 if (rs.getString(1).equals(accountName)) {
@@ -172,56 +187,72 @@ public class UserDatabase {
      * insert new user information to user table
      *
      * @param userId the accountName to be inserted
+     * @param userName user's preferred name
      * @param pwd the password of the account to be inserted
      */
     public void addNewUser(String userId, String userName, String pwd) {
         try {
             Statement statement = conn.createStatement();
             String sqlUpdate = "INSERT INTO " + this.USR_TBL_NAME + " values("
-                    + " '" + userId + "' , '" + userName + "' , '" + pwd + "')";
+                    + "'" + userId + "', '" + userName + "', '" + pwd
+                    + "', " + "0, " + "0)";
             statement.executeUpdate(sqlUpdate);
             statement.close();
-            System.out.println("new user added");
+            System.out.println("new user: " + userId + " added");
         } catch (SQLException ex) {
             Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
-    /**
-     * retrieve how many wins of a player
-     *
-     * @param userName the user account to be searched in the table
-     * @return true if the account is found, false otherwise
-     */
-    public int getWins(String userName) {
-        int wins = -1;
+    public String[] getUserTradeRecords(String id) {
+        String[] record = new String[5];
+        String query = "SELECT " + "*"
+                + " from " + this.USR_TBL_NAME + " where "
+                + this.USR_TBL_ATTRIBUTES[0] + " = '" + id + "'";
         try {
-            Statement st = conn.createStatement();
-            String sqlUpdate = "select WINS from " + this.USR_TBL_NAME + " where ID = '" + userName + "'";
-            ResultSet rs = st.executeQuery(sqlUpdate);
-            while (rs.next()) {
-                wins = rs.getInt("WINS");
+            Statement statement = this.conn.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+            if (rs.next()) {
+                record[0] = rs.getString(this.USR_TBL_ATTRIBUTES[0]);
+                record[1] = rs.getString(this.USR_TBL_ATTRIBUTES[1]);
+//                do not show password
+//                record[2] = rs.getString(this.USR_TBL_ATTRIBUTES[2]);
+                record[3] = Integer.toString(rs.getInt(this.USR_TBL_ATTRIBUTES[3]));
+                record[4] = Integer.toString(rs.getInt(this.USR_TBL_ATTRIBUTES[4]));
             }
-            st.close();
         } catch (SQLException ex) {
             Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return wins;
+        return record;
     }
 
     /**
-     * increase a user's winning times by 1
+     * increase a user's either purchase or sales count by 1
      *
-     * @param userName the winner
+     * @param userId the winner
+     * @param attribute the attribute to increment
      */
-    public void increaseWins(String userName) {
-        int currentWins = getWins(userName);
-        currentWins++;
+    public void incrementCounter(String userId, String attribute) {
+        String[] record = getUserTradeRecords(userId);
+        int currentValue;
         try {
             Statement st = conn.createStatement();
-            String sqlUpdate = "update " + this.USR_TBL_NAME + " set WINS = " + currentWins + " where ID = '" + userName + "'";
+            String sqlUpdate = null;
+            if (attribute.equals(this.USR_TBL_ATTRIBUTES[3])) {
+                //purchase
+                currentValue = Integer.parseInt(record[3]);
+                currentValue++;
+                sqlUpdate = "UPDATE " + this.USR_TBL_NAME + " set " + this.USR_TBL_ATTRIBUTES[3]
+                        + " = " + currentValue + " where ID = '" + userId + "'";
+            } else if (attribute.equals(this.USR_TBL_ATTRIBUTES[4])) {
+                //sales
+                currentValue = Integer.parseInt(record[4]);
+                currentValue++;
+                sqlUpdate = "UPDATE " + this.USR_TBL_NAME + " set " + this.USR_TBL_ATTRIBUTES[4]
+                        + " = " + currentValue + " where ID = '" + userId + "'";
+            }
             st.executeUpdate(sqlUpdate);
         } catch (SQLException ex) {
             Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
