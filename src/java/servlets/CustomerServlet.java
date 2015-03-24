@@ -1,26 +1,22 @@
-//package servlet;
-//
-//import java.io.IOException;
-//import java.sql.Connection;
-//import java.sql.DriverManager;
-//import java.sql.ResultSet;
-//import java.sql.SQLException;
-//import java.sql.PreparedStatement;
-//import java.util.Properties;
-//import javax.servlet.RequestDispatcher;
-//import javax.servlet.ServletException;
-//import javax.servlet.http.HttpServlet;
-//import javax.servlet.http.HttpSession;
-//import javax.servlet.http.HttpServletRequest;
-//import javax.servlet.http.HttpServletResponse;
-//
-//public class CustomerServlet extends HttpServlet {
-//
-//    private Connection conn;
-//    private PreparedStatement stmt;
-//
-//    public CustomerServlet()
-//            throws SQLException, ClassNotFoundException, IOException {  // obtain database parameters from configuration file
+package servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class CustomerServlet extends HttpServlet {
+    
+    private Connection conn;
+    private PreparedStatement stmt;
+    
+    public CustomerServlet()
+            throws SQLException, ClassNotFoundException, IOException {  // obtain database parameters from configuration file
 //        Properties properties = new Properties();
 //        properties.loadFromXML(getClass().getResourceAsStream("CustomerServletConfig.xml"));
 //        String dbDriver = properties.get("dbDriver").toString();
@@ -37,13 +33,19 @@
 //        conn = DriverManager.getConnection(dbUrl, userName, password);
 //        stmt = conn.prepareStatement("SELECT * FROM " + dbTable
 //                + " WHERE " + dbFirstNameAtt + " = ? AND " + dbLastNameAtt + " = ?");
-//    }
-//
-//   // handle the initial HTTP request and check whether client name is
-//    // in database before passing on request to a JSP
-//    public void doGet(HttpServletRequest request,
-//            HttpServletResponse response)
-//            throws ServletException, IOException {  // obtain the values of the form data automatically URL decoded
+    }
+
+    // handle the initial HTTP request and check whether client name is
+    // in database before passing on request to a JSP
+    public void doGet(HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html");
+
+        // Actual logic goes here.
+        PrintWriter out = response.getWriter();
+        out.println("<h1>" + request.getParameter("firstname") + " " + request.getParameter("lastname") + "</h1>");
+        // obtain the values of the form data automatically URL decoded
 //        String firstName = request.getParameter("firstname");
 //        String lastName = request.getParameter("lastname");
 //        if (firstName == null || lastName == null
@@ -55,7 +57,7 @@
 //            Customer customer = new Customer();
 //            customer.setFirstName(firstName);
 //            customer.setLastName(lastName);
-//            // check database for name using an SQL command
+        // check database for name using an SQL command
 //            boolean customerFound;
 //            try {
 //                synchronized (this) // synchronize access to stmt
@@ -69,10 +71,10 @@
 //                System.err.println("SQL Exception during query: " + e);
 //                customerFound = false;
 //            }
-//            // make customer bean available for session
+        // make customer bean available for session
 //            HttpSession session = request.getSession(true);
 //            session.setAttribute("customer", customer);
-//            // pass bean to appropriate page for displaying response
+        // pass bean to appropriate page for displaying response
 //            if (customerFound) {
 //                RequestDispatcher dispatcher = getServletContext().
 //                        getRequestDispatcher("/CustomerFound.jsp");
@@ -82,27 +84,27 @@
 //                        getRequestDispatcher("/CustomerNotFound.jsp");
 //                dispatcher.forward(request, response);
 //            }
-//        }
 //    }
-//
-//    public void doPost(HttpServletRequest request,
-//            HttpServletResponse response)
-//            throws ServletException, IOException {
-//        doGet(request, response);
-//    }
-//
-//    public void destroy() {
-//        super.destroy();
-//        // close database connection
-//        try {
-//            if (stmt != null) {
-//                stmt.close();
-//            }
-//            if (conn != null) {
-//                conn.close();
-//            }
-//        } catch (SQLException e) {
-//            System.err.println("SQL Exception while closing: " + e);
-//        }
-//    }
-//}
+    }
+    
+    public void doPost(HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException, IOException {
+        doGet(request, response);
+    }
+    
+    public void destroy() {
+        super.destroy();
+        // close database connection
+        try {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (SQLException e) {
+            System.err.println("SQL Exception while closing: " + e);
+        }
+    }
+}

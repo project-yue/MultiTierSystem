@@ -53,6 +53,7 @@ public class UserDatabase {
         test = db.getUserTradeRecords("hello");
         System.out.println("Hello! " + test[1] + ", You have sold " + test[4]
                 + " , and bought " + test[3] + "item(s)");
+        db.addNewItem("re", "11.32", true);
     }
 
     /**
@@ -90,8 +91,9 @@ public class UserDatabase {
             Statement statement = conn.createStatement();
             String sqlCreate = "CREATE TABLE " + this.ITEM_TBL + "(" + this.ITEM_TBL_ATTRIBUTES[0]
                     + " INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
-                    + " " + this.ITEM_TBL_ATTRIBUTES[1] + " VARCHAR(30), " + this.ITEM_TBL_ATTRIBUTES[2]
-                    + " DECIMAL(16, 2), " + this.ITEM_TBL_ATTRIBUTES[3] + " BOOLEAN)";
+                    + " " + this.ITEM_TBL_ATTRIBUTES[1] + " VARCHAR(30) NOT NULL ," + this.ITEM_TBL_ATTRIBUTES[2]
+                    + " DECIMAL(16, 2) NOT NULL , " + this.ITEM_TBL_ATTRIBUTES[3] + " BOOLEAN,"
+                    + " CONSTRAINT primary_key PRIMARY KEY (" + this.ITEM_TBL_ATTRIBUTES[0] + "))";
             statement.executeUpdate(sqlCreate);
         } catch (SQLException ex) {
             Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
@@ -202,7 +204,6 @@ public class UserDatabase {
         } catch (SQLException ex) {
             Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     public String[] getUserTradeRecords(String id) {
@@ -254,6 +255,20 @@ public class UserDatabase {
                         + " = " + currentValue + " where ID = '" + userId + "'";
             }
             st.executeUpdate(sqlUpdate);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+//----------------Item table updates----------------------------------------------------
+    public void addNewItem(String name, String price, boolean active) {
+        try {
+            Statement statement = conn.createStatement();
+            String sqlUpdate = "INSERT INTO " + this.ITEM_TBL + " (" + this.ITEM_TBL_ATTRIBUTES[1]
+                    + ", " + this.ITEM_TBL_ATTRIBUTES[2]+ ", " + ")" + " values(" + "'" + name + "', '" + price + "', " + active + ")";
+            statement.executeUpdate(sqlUpdate);
+            statement.close();
+            System.out.println("new item: " + name + " added");
         } catch (SQLException ex) {
             Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
         }

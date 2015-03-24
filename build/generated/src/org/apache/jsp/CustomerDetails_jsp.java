@@ -65,7 +65,7 @@ public final class CustomerDetails_jsp extends org.apache.jasper.runtime.HttpJsp
                 }
                 if (firstName.length() > 0 && lastName.length() > 0) {  // there is no need to display form as name already provided
                     RequestDispatcher dispatcher = getServletContext().
-                            getRequestDispatcher("/servlet/multitier.CustomerServlet");
+                            getRequestDispatcher("/servlets.CustomerServlet");
                     dispatcher.forward(request, response);
                 }
                 // else prepare appropriate instructions for form
@@ -84,7 +84,7 @@ public final class CustomerDetails_jsp extends org.apache.jasper.runtime.HttpJsp
       out.write("\n");
       out.write("\n");
       out.write("        <FORM ACTION=\n");
-      out.write("              \"http://localhost:8080/servlet/multitier.CustomerServlet\">\n");
+      out.write("              \"http://localhost:8080/MultiTier/CustomerServlet\">\n");
       out.write("            <P>First name:\n");
       out.write("                <INPUT TYPE=\"TEXT\" NAME=\"firstname\" VALUE=\"");
       out.print( firstName);

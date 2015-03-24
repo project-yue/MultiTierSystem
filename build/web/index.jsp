@@ -13,8 +13,24 @@
     </head>
     <body>
         <h1>Login</h1>
+        <%@ page import = "javax.servlet.RequestDispatcher" %>
+        <%
+            RequestDispatcher dispatcher;
+            String name = request.getParameter("name");
+            String pwd = request.getParameter("pwd");
+            if (name == null || pwd == null) {
+                name = "";
+                pwd = "";
+            }
+            if(name.length() > 0 && pwd.length() > 0){
+                dispatcher = getServletContext().getRequestDispatcher("/servlet/LogonServlet");
+            }
+        %>
+
         <form>
+
             <input type="submit">
         </form>
+        <p><a HREF="/MultiTier/register.jsp">Register</a></p>
     </body>
 </html>

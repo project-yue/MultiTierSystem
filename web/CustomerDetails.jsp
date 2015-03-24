@@ -24,7 +24,7 @@
                 }
                 if (firstName.length() > 0 && lastName.length() > 0) {  // there is no need to display form as name already provided
                     RequestDispatcher dispatcher = getServletContext().
-                            getRequestDispatcher("/servlet/multitier.CustomerServlet");
+                            getRequestDispatcher("/servlets.CustomerServlet");
                     dispatcher.forward(request, response);
                 }
                 // else prepare appropriate instructions for form
@@ -42,7 +42,7 @@
             %>
 
         <FORM ACTION=
-              "http://localhost:8080/servlet/multitier.CustomerServlet">
+              "http://localhost:8080/MultiTier/CustomerServlet">
             <P>First name:
                 <INPUT TYPE="TEXT" NAME="firstname" VALUE="<%= firstName%>"></P>
             <P>Last name:
