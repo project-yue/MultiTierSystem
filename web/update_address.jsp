@@ -1,8 +1,7 @@
 <%-- 
-    Document   : show_items, it should contain buy items for the registered users.
-users should be able to post items for sale
-    Created on : 24/03/2015, 11:24:14 PM
-    Author     : Yue
+    Document   : update_address
+    Created on : 25/03/2015, 12:56:39 AM
+    Author     : mk29
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -13,6 +12,6 @@ users should be able to post items for sale
         <title>Shopping App</title>
     </head>
     <body>
-        <p><a HREF="/MultiTier/index.jsp">Update Address</a></p>
+        
     </body>
 </html>

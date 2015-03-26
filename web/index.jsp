@@ -9,9 +9,10 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Shopping App</title>
+        <title>Sharing Unwanted</title>
     </head>
     <body>
+        <h3>Hello, welcome to Sharing unwanted. A place for people to share items for free</h3>
         <h1>Login</h1>
         <%@ page import = "javax.servlet.RequestDispatcher" %>
         <%
@@ -22,7 +23,7 @@
                 name = "";
                 pwd = "";
             }
-            if(name.length() > 0 && pwd.length() > 0){
+            if (name.length() > 0 && pwd.length() > 0) {
                 dispatcher = getServletContext().getRequestDispatcher("/servlet/LogonServlet");
             }
         %>

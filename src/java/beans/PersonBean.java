@@ -9,16 +9,16 @@ package beans;
  *
  * @author mk29
  */
-public class Person {
+public class PersonBean {
 
     private String name;
     private int age;
-    private Address address;
+    private AddressBean address;
 
-    public Person() {
+    public PersonBean() {
         setName("A N Other");
         setAge(21);
-        this.address = new Address();
+        this.address = new AddressBean();
     }
 
     public void setName(String name) {
@@ -37,11 +37,11 @@ public class Person {
         return age;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(AddressBean address) {
         this.address = address;
     }
 
-    public Address getAddress() {
+    public AddressBean getAddress() {
         return address;
     }
 }

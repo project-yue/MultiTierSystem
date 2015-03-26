@@ -49,52 +49,26 @@ public final class index_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("<html>\n");
       out.write("    <head>\n");
       out.write("        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n");
-      out.write("        <title>Shopping App</title>\n");
+      out.write("        <title>Sharing Unwanted</title>\n");
       out.write("    </head>\n");
       out.write("    <body>\n");
+      out.write("        <h3>Hello, welcome to Sharing unwanted. A place for people to share items for free</h3>\n");
       out.write("        <h1>Login</h1>\n");
       out.write("        \n");
       out.write("        ");
 
-            String firstName = request.getParameter("firstname");
-            String lastName = request.getParameter("lastname");
-            if (firstName == null) {
-                firstName = "";
+            RequestDispatcher dispatcher;
+            String name = request.getParameter("name");
+            String pwd = request.getParameter("pwd");
+            if (name == null || pwd == null) {
+                name = "";
+                pwd = "";
             }
-            if (lastName == null) {
-                lastName = "";
+            if (name.length() > 0 && pwd.length() > 0) {
+                dispatcher = getServletContext().getRequestDispatcher("/servlet/LogonServlet");
             }
-            if (firstName.length() > 0 && lastName.length() > 0) {  // there is no need to display form as name already provided
-                RequestDispatcher dispatcher = getServletContext().
-                        getRequestDispatcher("/servlet/multitier.CustomerServlet");
-                dispatcher.forward(request, response);
-            }
-            // else prepare appropriate instructions for form
-            out.print("<P><B>Please enter ");
-            if (firstName.length() == 0) {
-                out.print("first name");
-                if (lastName.length() == 0) {
-                    out.print(" and ");
-                }
-            }
-            if (lastName.length() == 0) {
-                out.print("last name");
-            }
-            out.println("</B></P>");
         
       out.write("\n");
-      out.write("\n");
-      out.write("<!--        <FORM ACTION= \"http://localhost:8080/servlet/multitier.CustomerServlet\">\n");
-      out.write("            <P>First name:\n");
-      out.write("                <INPUT TYPE=\"TEXT\" NAME=\"firstname\" VALUE=\"");
-      out.print( firstName);
-      out.write("\"></P>\n");
-      out.write("            <P>Last name:\n");
-      out.write("                <INPUT TYPE=\"TEXT\" NAME=\"lastname\" VALUE=\"");
-      out.print( lastName);
-      out.write("\"></P>\n");
-      out.write("            <INPUT TYPE=\"SUBMIT\">\n");
-      out.write("        </FORM>-->\n");
       out.write("\n");
       out.write("        <form>\n");
       out.write("\n");

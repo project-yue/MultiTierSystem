@@ -13,6 +13,6 @@ users should be able to post items for sale
         <title>Shopping App</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <p><a HREF="/MultiTier/index.jsp">Update Address</a></p>
     </body>
 </html>

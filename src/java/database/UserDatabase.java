@@ -265,7 +265,7 @@ public class UserDatabase {
         try {
             Statement statement = conn.createStatement();
             String sqlUpdate = "INSERT INTO " + this.ITEM_TBL + " (" + this.ITEM_TBL_ATTRIBUTES[1]
-                    + ", " + this.ITEM_TBL_ATTRIBUTES[2]+ ", " + ")" + " values(" + "'" + name + "', '" + price + "', " + active + ")";
+                    + ", " + this.ITEM_TBL_ATTRIBUTES[2] + ", " + ")" + " values(" + "'" + name + "', '" + price + "', " + active + ")";
             statement.executeUpdate(sqlUpdate);
             statement.close();
             System.out.println("new item: " + name + " added");

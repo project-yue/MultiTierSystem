@@ -7,35 +7,55 @@ package beans;
 
 import java.util.Collection;
 
-public class Address {
+public class AddressBean {
 
-    private String line1;
-    private String town;
+    private String streetNum;
+    private String streetName;
+    private String suburb;
+    private String reigon;
     private String county;
     private String postcode;
     private Collection phoneNumbers;
 
-    public Address() {
-        this.line1 = "line1";
-        this.town = "a town2";
+    public AddressBean() {
+        this.streetNum = "a number";
+        this.streetName = "a street";
+        this.suburb = "a suburb";
+        this.reigon = "a region";
         this.county = "a county";
         this.postcode = "postcode";
     }
 
-    public void setLine1(String line1) {
-        this.line1 = line1;
+    public void setStreetNum(String line1) {
+        this.streetNum = line1;
     }
 
-    public String getLine1() {
-        return line1;
+    public String getStreetNum() {
+        return streetNum;
     }
 
-    public void setTown(String town) {
-        this.town = town;
+    public void setStreetName(String streetName) {
+        this.streetName = streetName;
     }
 
-    public String getTown() {
-        return town;
+    public String getStreetName() {
+        return this.streetName;
+    }
+
+    public void setSuburb(String suburb) {
+        this.suburb = suburb;
+    }
+
+    public String getSuburb() {
+        return suburb;
+    }
+
+    public void setReigon(String reigon) {
+        this.reigon = reigon;
+    }
+
+    public String getReigon() {
+        return this.reigon;
     }
 
     public void setCounty(String county) {

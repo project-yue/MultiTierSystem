@@ -5,9 +5,10 @@
  */
 package servlets;
 
-import beans.Address;
-import beans.Person;
+import beans.AddressBean;
+import beans.PersonBean;
 import beans.PhoneNumber;
+import database.UserDatabase;
 
 /**
  *
@@ -23,14 +24,17 @@ import javax.servlet.http.HttpServletResponse;
 
 public class PopulateServlet extends HttpServlet {
 
+    private UserDatabase db; 
+    
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
-        Person p = new Person();
+        
+        PersonBean p = new PersonBean();
         p.setName("Sam Dalton");
         p.setAge(26);
-        Address a = new Address();
-        a.setLine1("221b Baker Street");
-        a.setTown("London");
+        AddressBean a = new AddressBean();
+        a.setStreetNum("221b Baker Street");
+        a.setSuburb("London");
         a.setCounty("Greater London");
         a.setPostcode("NW1 1AA");
         ArrayList al = new ArrayList();

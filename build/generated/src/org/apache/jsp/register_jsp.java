@@ -56,13 +56,9 @@ public final class register_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("        <FORM ACTION=\n");
       out.write("              \"http://localhost:8080/MultiTier/RegistrationServlet\">\n");
       out.write("            <P>First name:\n");
-      out.write("                <INPUT TYPE=\"TEXT\" NAME=\"firstname\" VALUE=\"");
- 
-      out.write("\"></P>\n");
+      out.write("                <INPUT TYPE=\"TEXT\" NAME=\"firstname\" required></P>\n");
       out.write("            <P>Last name:\n");
-      out.write("                <INPUT TYPE=\"TEXT\" NAME=\"lastname\" VALUE=\"");
- 
-      out.write("\"></P>\n");
+      out.write("                <INPUT TYPE=\"TEXT\" NAME=\"lastname\" required></P>\n");
       out.write("            <INPUT TYPE=\"SUBMIT\">\n");
       out.write("        </FORM>\n");
       out.write("\n");

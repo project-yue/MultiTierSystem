@@ -18,9 +18,9 @@ registered, and show the items list
         <FORM ACTION=
               "http://localhost:8080/MultiTier/RegistrationServlet">
             <P>First name:
-                <INPUT TYPE="TEXT" NAME="firstname" VALUE="<% %>"></P>
+                <INPUT TYPE="TEXT" NAME="firstname" required></P>
             <P>Last name:
-                <INPUT TYPE="TEXT" NAME="lastname" VALUE="<%%>"></P>
+                <INPUT TYPE="TEXT" NAME="lastname" required></P>
             <INPUT TYPE="SUBMIT">
         </FORM>
 
