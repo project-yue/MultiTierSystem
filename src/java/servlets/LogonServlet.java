@@ -5,6 +5,7 @@
  */
 package servlets;
 
+import database.UserDatabase;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -29,6 +30,7 @@ public class LogonServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        UserDatabase udb = startDatabaseConnection();
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
@@ -38,14 +40,21 @@ public class LogonServlet extends HttpServlet {
             out.println("<title>Servlet LogonServlet</title>");
             out.println("</head>");
             out.println("<body>");
+            if (udb.doesAccountExist(request.getParameter("usr_id"))) {
+                out.println("<p>Welcome back, " + request.getParameter("usr_id") + "</p>");
+            } else {
+                out.println("<p>" + request.getParameter("usr_id") + " has not been registered.</p>");
+            }
             out.println("<h1>Servlet LogonServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
 
-    private void startDatabaseConnection() {
-
+    private UserDatabase startDatabaseConnection() {
+        UserDatabase db = new UserDatabase();
+        db.establishConnection();
+        return db;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

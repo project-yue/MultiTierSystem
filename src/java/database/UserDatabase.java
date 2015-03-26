@@ -89,7 +89,7 @@ public class UserDatabase {
                     + " VARCHAR(25) NOT NULL, " + this.USR_TBL_ATTRIBUTES[1] + " VARCHAR(30),"
                     + " " + this.USR_TBL_ATTRIBUTES[2] + " VARCHAR(16) NOT NULL,"
                     + " " + this.USR_TBL_ATTRIBUTES[3] + " INTEGER, " + this.USR_TBL_ATTRIBUTES[4]
-                    + " INTEGER," + " PRIMARY KEY (ID))";
+                    + " INTEGER," + " PRIMARY KEY (" + this.USR_TBL_ATTRIBUTES[0] + "))";
             statement.executeUpdate(sqlCreate);
             System.out.println("User Table created");
         } catch (SQLException ex) {
@@ -174,19 +174,19 @@ public class UserDatabase {
     /**
      * does the account exist in the user table
      *
-     * @param accountName the account to be searched in database
+     * @param usr_id the account to be searched in database
      * @return true if the account is found, false otherwise
      */
-    public boolean doesAccountExist(String accountName) {
+    public boolean doesAccountExist(String usr_id) {
         boolean isFound = false;
         try {
             Statement statement = conn.createStatement();
             String selectComm = "SELECT " + this.USR_TBL_ATTRIBUTES[0]
                     + " from " + this.USR_TBL_NAME + " where "
-                    + this.USR_TBL_ATTRIBUTES[0] + " = '" + accountName + "'";
+                    + this.USR_TBL_ATTRIBUTES[0] + " = '" + usr_id + "'";
             ResultSet rs = statement.executeQuery(selectComm);
             while (rs.next()) {
-                if (rs.getString(1).equals(accountName)) {
+                if (rs.getString(1).equals(usr_id)) {
                     isFound = true;
                 }
             }
@@ -276,8 +276,11 @@ public class UserDatabase {
     public void addNewItem(String name, String price, boolean active) {
         try {
             Statement statement = conn.createStatement();
+            double val = Double.parseDouble(price);
+            System.out.println(val);
             String sqlUpdate = "INSERT INTO " + this.ITEM_TBL + " (" + this.ITEM_TBL_ATTRIBUTES[1]
-                    + ", " + this.ITEM_TBL_ATTRIBUTES[2] + ", " + ")" + " values(" + "'" + name + "', '" + price + "', " + active + ")";
+                    + ", " + this.ITEM_TBL_ATTRIBUTES[2] + ", " + this.ITEM_TBL_ATTRIBUTES[3] + ")"
+                    + " values(" + "'" + name + "', " + val + ", " + active + ")";
             statement.executeUpdate(sqlUpdate);
             statement.close();
             System.out.println("new item: " + name + " added");
