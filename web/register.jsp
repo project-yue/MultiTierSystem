@@ -15,15 +15,18 @@ registered, and show the items list
     <body>
         <h1>Registration</h1>
 
-        <FORM ACTION=
-              "http://localhost:8080/MultiTier/RegistrationServlet">
-            <P>First name:
-                <INPUT TYPE="TEXT" NAME="firstname" required></P>
-            <P>Last name:
-                <INPUT TYPE="TEXT" NAME="lastname" required></P>
-            <INPUT TYPE="SUBMIT">
-        </FORM>
+    <from ACTION=
+          "http://localhost:8080/MultiTier/RegistrationServlet">
 
-        <p><a HREF="/MultiTier/index.jsp">Return</a></p>
-    </body>
+        <p>ID:
+            <input type="text" NAME="id" size="" required></p>
+        <P>name:
+            <INPUT TYPE="TEXT" NAME="name" required></P>
+        <P>password:
+            <INPUT TYPE="TEXT" NAME="pwd" required></P>
+        <INPUT TYPE="SUBMIT">
+    </from>
+
+    <p><a HREF="/MultiTier/index.jsp">Return</a></p>
+</body>
 </html>

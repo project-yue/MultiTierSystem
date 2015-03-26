@@ -56,6 +56,17 @@ public class UserDatabase {
         db.addNewItem("re", "11.32", true);
     }
 
+    public void initDatabase() {
+        UserDatabase db = new UserDatabase();
+        db.establishConnection();
+        if (!db.doesUserTableExist()) {
+            db.createUserTable();
+        }
+        if (!db.doesItemTableExist()) {
+            db.createItemTable();
+        }
+    }
+
     /**
      * start connection with an existing database
      */
@@ -95,6 +106,7 @@ public class UserDatabase {
                     + " DECIMAL(16, 2) NOT NULL , " + this.ITEM_TBL_ATTRIBUTES[3] + " BOOLEAN,"
                     + " CONSTRAINT primary_key PRIMARY KEY (" + this.ITEM_TBL_ATTRIBUTES[0] + "))";
             statement.executeUpdate(sqlCreate);
+            System.out.println("Item table created");
         } catch (SQLException ex) {
             Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
         }

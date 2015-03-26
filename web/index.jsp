@@ -28,9 +28,10 @@
             }
         %>
 
-        <form>
-
-            <input type="submit">
+        <form action="http://localhost:8080/MultiTier/LogonServlet">
+            <p> ID <input type="text" name="usr_id" maxlength="25" size="26" required></p>
+            <p> Password <input type="text" name="usr_pwd" maxlength="16" size="17" required></p>
+            <input type="submit" value="Login">
         </form>
         <p><a HREF="/MultiTier/register.jsp">Register</a></p>
     </body>

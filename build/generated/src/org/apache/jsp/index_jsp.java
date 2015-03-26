@@ -70,9 +70,10 @@ public final class index_jsp extends org.apache.jasper.runtime.HttpJspBase
         
       out.write("\n");
       out.write("\n");
-      out.write("        <form>\n");
-      out.write("\n");
-      out.write("            <input type=\"submit\">\n");
+      out.write("        <form action=\"http://localhost:8080/MultiTier/LogonServlet\">\n");
+      out.write("            <p> ID <input type=\"text\" name=\"usr_id\" maxlength=\"25\" size=\"26\" required></p>\n");
+      out.write("            <p> Password <input type=\"text\" name=\"usr_pwd\" maxlength=\"16\" size=\"17\" required></p>\n");
+      out.write("            <input type=\"submit\" value=\"Login\">\n");
       out.write("        </form>\n");
       out.write("        <p><a HREF=\"/MultiTier/register.jsp\">Register</a></p>\n");
       out.write("    </body>\n");

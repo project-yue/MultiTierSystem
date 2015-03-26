@@ -35,13 +35,17 @@ public class LogonServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LogonServlet</title>");            
+            out.println("<title>Servlet LogonServlet</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet LogonServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
+    }
+
+    private void startDatabaseConnection() {
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
