@@ -3,6 +3,7 @@ package org.apache.jsp;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
+import javax.servlet.RequestDispatcher;
 
 public final class register_jsp extends org.apache.jasper.runtime.HttpJspBase
     implements org.apache.jasper.runtime.JspSourceDependent {
@@ -30,7 +31,7 @@ public final class register_jsp extends org.apache.jasper.runtime.HttpJspBase
     PageContext _jspx_page_context = null;
 
     try {
-      response.setContentType("text/html;charset=UTF-8");
+      response.setContentType("text/html");
       pageContext = _jspxFactory.getPageContext(this, request, response,
       			null, true, 8192, true);
       _jspx_page_context = pageContext;
@@ -50,20 +51,56 @@ public final class register_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n");
       out.write("        <title>Shopping App</title>\n");
       out.write("    </head>\n");
+      out.write("    \n");
+      out.write("    ");
+
+        String firstName = request.getParameter("firstname");
+        String lastName = request.getParameter("lastname");
+        if (firstName == null) {
+            firstName = "";
+        }
+        if (lastName == null) {
+            lastName = "";
+        }
+        if (firstName.length() > 0 && lastName.length() > 0) {  // there is no need to display form as name already provided
+            RequestDispatcher dispatcher = getServletContext().
+                    getRequestDispatcher("/servlets.CustomerServlet");
+            dispatcher.forward(request, response);
+        }
+        // else prepare appropriate instructions for form
+        out.print("<P><B>Please enter ");
+        if (firstName.length() == 0) {
+            out.print("first name");
+            if (lastName.length() == 0) {
+                out.print(" and ");
+            }
+        }
+        if (lastName.length() == 0) {
+            out.print("last name");
+        }
+        out.println("</B></P>");
+    
+      out.write("\n");
       out.write("    <body>\n");
       out.write("        <h1>Registration</h1>\n");
       out.write("\n");
-      out.write("        <FORM ACTION=\n");
-      out.write("              \"http://localhost:8080/MultiTier/RegistrationServlet\">\n");
-      out.write("            <P>First name:\n");
-      out.write("                <INPUT TYPE=\"TEXT\" NAME=\"firstname\" required></P>\n");
-      out.write("            <P>Last name:\n");
-      out.write("                <INPUT TYPE=\"TEXT\" NAME=\"lastname\" required></P>\n");
-      out.write("            <INPUT TYPE=\"SUBMIT\">\n");
-      out.write("        </FORM>\n");
       out.write("\n");
-      out.write("        <p><a HREF=\"/MultiTier/index.jsp\">Return</a></p>\n");
-      out.write("    </body>\n");
+      out.write("    <from ACTION=\n");
+      out.write("          \"http://localhost:8080/MultiTier/RegistrationServlet\">\n");
+      out.write("\n");
+      out.write("        <p>ID:\n");
+      out.write("            <input type=\"text\" NAME=\"id\" size=\"\" required></p>\n");
+      out.write("        <P>name:\n");
+      out.write("            <INPUT TYPE=\"TEXT\" NAME=\"name\" required></P>\n");
+      out.write("        <P>password:\n");
+      out.write("            <INPUT TYPE=\"TEXT\" NAME=\"pwd\" required></P>\n");
+      out.write("        <INPUT TYPE=\"SUBMIT\">\n");
+      out.write("    </from>\n");
+      out.write("\n");
+      out.write("    <p><a HREF=\"/MultiTier/index.jsp\">Return</a></p>\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("</body>\n");
       out.write("</html>\n");
     } catch (Throwable t) {
       if (!(t instanceof SkipPageException)){

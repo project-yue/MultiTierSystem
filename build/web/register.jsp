@@ -5,7 +5,7 @@ registered, and show the items list
     Author     : Yue
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -14,6 +14,7 @@ registered, and show the items list
     </head>
     <body>
         <h1>Registration</h1>
+
 
     <from ACTION=
           "http://localhost:8080/MultiTier/RegistrationServlet">
@@ -27,6 +28,6 @@ registered, and show the items list
         <INPUT TYPE="SUBMIT">
     </from>
 
-    <p><a HREF="/MultiTier/index.jsp">Return</a></p>
+
 </body>
 </html>
