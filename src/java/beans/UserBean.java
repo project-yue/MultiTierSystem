@@ -7,52 +7,60 @@ import java.io.Serializable;
  *
  * @author Yue Li
  */
-public class CustomerBean implements Serializable {
+public class UserBean implements Serializable {
 
     private String id;
     private String name;
     private String pwd;
-    private int purchase;
-    private int sales;
+    private int share;
+    private int use;
 
     private PropertyChangeSupport propertySupport;
 
-    public CustomerBean() {
+    public UserBean() {
         propertySupport = new PropertyChangeSupport(this);
     }
 
-    public String getNameProperty() {
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
         return name;
     }
 
-    public void setNameProperty(String value) {
+    public void setName(String value) {
         String oldValue = name;
         name = value;
-        propertySupport.firePropertyChange(id, oldValue, name);
+//        propertySupport.firePropertyChange(id, oldValue, name);
     }
 
-    public String getPwdProperty() {
+    public String getPwd() {
         return this.pwd;
     }
 
-    public void setPwdProperty(String pwd) {
+    public void setPwd(String pwd) {
         this.pwd = pwd;
     }
 
-    public int getPurchaseProperty() {
-        return this.purchase;
+    public int getShare() {
+        return this.share;
     }
 
-    public void incrementPurchaseProperty() {
-        this.purchase++;
+    public void setShare(int value) {
+        this.share = value;
     }
 
-    public int getSalesProperty() {
-        return this.sales;
+    public int getUse() {
+        return this.use;
     }
 
-    public void incrementSalesProperty() {
-        this.sales++;
+    public void setUse(int value) {
+        this.use = value;
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {

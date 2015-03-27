@@ -40,8 +40,33 @@
         <title>Sharing Unwanted</title>
     </head>
     <body>
+        <jsp:useBean id="user" class="beans.UserBean" scope="session">
+            <jsp:setProperty name="user" 
+                             property="id"
+                             value = "guest"/>
+            <jsp:setProperty name="user" 
+                             property="name"
+                             value = "Guest"/>
+            <jsp:setProperty name="user" 
+                             property="pwd"
+                             value = "undefined"/>
+            <jsp:setProperty name="user" 
+                             property="share"
+                             value = "0"/>
+            <jsp:setProperty name="user" 
+                             property="use"
+                             value = "0"/>
+        </jsp:useBean>
+
         <h3>Hello, welcome to Sharing unwanted. A place for people to share items for free</h3>
-        <h3><%= greeting%></h3>
+
+        <h4>
+            Hello, <jsp:getProperty name="user" property="name"/> 
+            (<jsp:getProperty name="user" property="id" />)<br/>
+        </h4>
+        <p>You have shared <jsp:getProperty name="user" property="share" />,
+            and used <jsp:getProperty name="user" property="use" /> items</p>
+
         <h1>Login</h1>
         <%@ page import = "javax.servlet.RequestDispatcher" %>
         <%
@@ -59,14 +84,13 @@
 
         <form action="http://localhost:8080/MultiTier/LogonServlet">
             <p> ID <input type="text" name="usr_id" maxlength="25" size="26" required></p>
-            <p> Password <input type="text" name="usr_pwd" maxlength="16" size="17" required></p>
+            <p> Password <input type="password" name="usr_pwd" maxlength="16" size="17" required></p>
             <input type="submit" value="Login">
         </form>
 
         <p>Session ID: <% out.print(request.getSession().getId()); %></p>
         <p>Created time: <% out.print(createTime); %></p>
         <p>Last access time: <% out.print(lastAccessTime); %></p>
-        <p>User ID: <% out.print(userID); %></p>
         <p>Number of visits: <% out.print(visitCount);%></p>
 
         <p><a HREF="/MultiTier/register.jsp">Register</a></p>

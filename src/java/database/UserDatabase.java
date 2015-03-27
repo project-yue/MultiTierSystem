@@ -4,12 +4,15 @@
  */
 package database;
 
+import beans.ItemBean;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,9 +25,9 @@ public class UserDatabase {
 
     private final String URL = "jdbc:derby://localhost:1527/ass1DB;create=true";
     private final String USR_TBL_NAME = "DB_User";
-    private final String[] USR_TBL_ATTRIBUTES = {"ID", "NAME", "PWD", "PURCHASE", "SALES"};
+    private final String[] USR_TBL_ATTRIBUTES = {"ID", "NAME", "PWD", "SHARED", "USED"};
     private final String ITEM_TBL = "DB_Item";
-    private final String[] ITEM_TBL_ATTRIBUTES = {"ID", "NAME", "PRICE", "ACTIVE"};
+    private final String[] ITEM_TBL_ATTRIBUTES = {"ID", "NAME", "HEAT", "AVAILABLE"};
     private Connection conn;
 
     public static void main(String[] args) {
@@ -53,10 +56,10 @@ public class UserDatabase {
         test = db.getUserTradeRecords("hello");
         System.out.println("Hello! " + test[1] + ", You have sold " + test[4]
                 + " , and bought " + test[3] + "item(s)");
-        db.addNewItem("re", "11.32", true);
+//        db.addNewItem("re", "11.32", true);
     }
 
-    public void initDatabase() {
+    public static UserDatabase INIT_DB() {
         UserDatabase db = new UserDatabase();
         db.establishConnection();
         if (!db.doesUserTableExist()) {
@@ -65,6 +68,7 @@ public class UserDatabase {
         if (!db.doesItemTableExist()) {
             db.createItemTable();
         }
+        return db;
     }
 
     /**
@@ -142,7 +146,6 @@ public class UserDatabase {
         } catch (SQLException ex) {
             Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return result;
     }
 
@@ -218,6 +221,21 @@ public class UserDatabase {
         }
     }
 
+    public List<ItemBean> getItemsList() throws Exception {
+        List<ItemBean> result = new ArrayList<>();
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("Select * from " + this.ITEM_TBL);
+        while (rs.next()) {
+            ItemBean ib = new ItemBean();
+            ib.setId(rs.getString(this.ITEM_TBL_ATTRIBUTES[0]));
+            ib.setName(rs.getString(this.ITEM_TBL_ATTRIBUTES[1]));
+            ib.setHeat(rs.getInt(this.ITEM_TBL_ATTRIBUTES[2]));
+            ib.setAvailable(rs.getBoolean(this.ITEM_TBL_ATTRIBUTES[3]));
+            result.add(ib);
+        }
+        return result;
+    }
+
     public String[] getUserTradeRecords(String id) {
         String[] record = new String[5];
         String query = "SELECT " + "*"
@@ -229,8 +247,6 @@ public class UserDatabase {
             if (rs.next()) {
                 record[0] = rs.getString(this.USR_TBL_ATTRIBUTES[0]);
                 record[1] = rs.getString(this.USR_TBL_ATTRIBUTES[1]);
-//                do not show password
-//                record[2] = rs.getString(this.USR_TBL_ATTRIBUTES[2]);
                 record[3] = Integer.toString(rs.getInt(this.USR_TBL_ATTRIBUTES[3]));
                 record[4] = Integer.toString(rs.getInt(this.USR_TBL_ATTRIBUTES[4]));
             }
@@ -273,14 +289,14 @@ public class UserDatabase {
     }
 
 //----------------Item table updates----------------------------------------------------
-    public void addNewItem(String name, String price, boolean active) {
+    public void addNewItem(String name, boolean available) {
         try {
             Statement statement = conn.createStatement();
-            double val = Double.parseDouble(price);
-            System.out.println(val);
+//            double val = Double.parseDouble(price);
+//            System.out.println(val);
             String sqlUpdate = "INSERT INTO " + this.ITEM_TBL + " (" + this.ITEM_TBL_ATTRIBUTES[1]
-                    + ", " + this.ITEM_TBL_ATTRIBUTES[2] + ", " + this.ITEM_TBL_ATTRIBUTES[3] + ")"
-                    + " values(" + "'" + name + "', " + val + ", " + active + ")";
+                    + ", " + this.ITEM_TBL_ATTRIBUTES[3] + ")"
+                    + " values(" + "'" + name + "', " + available + ")";
             statement.executeUpdate(sqlUpdate);
             statement.close();
             System.out.println("new item: " + name + " added");

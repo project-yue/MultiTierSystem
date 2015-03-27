@@ -10,7 +10,7 @@ registered, and show the items list
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Shopping App</title>
+        <title>Share Unwanted</title>
     </head>
     <body>
         <h1>Registration</h1>
@@ -20,14 +20,15 @@ registered, and show the items list
           "http://localhost:8080/MultiTier/RegistrationServlet">
 
         <p>ID:
-            <input type="text" NAME="id" size="" required></p>
-        <P>name:
-            <INPUT TYPE="TEXT" NAME="name" required></P>
-        <P>password:
-            <INPUT TYPE="TEXT" NAME="pwd" required></P>
-        <INPUT TYPE="SUBMIT">
+            <input type="text" name="id" maxlength="25" size="26" required></p>
+        <p>name:
+            <input type="text" name="name" maxlength="30" size="31"  required></p>
+        <p>password:
+            <input type="password" name="pwd" maxlength="16" size="17" required></p>
+        <input type="submit">
     </from>
 
+    <p><p><a HREF="/MultiTier/index.jsp">Back to home</a></p></p>
 
 </body>
 </html>
