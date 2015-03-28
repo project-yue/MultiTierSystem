@@ -79,50 +79,81 @@ public final class items_005flist_jsp extends org.apache.jasper.runtime.HttpJspB
       out.write(org.apache.jasper.runtime.JspRuntimeLibrary.toString(org.apache.jasper.runtime.JspRuntimeLibrary.handleGetProperty(_jspx_page_context.findAttribute("user"), "use")));
       out.write(" items\n");
       out.write("        </p>\n");
+      out.write("        <p><a HREF=\"/MultiTier/index.jsp\">Return</a></p>\n");
       out.write("        <p>\n");
       out.write("            ");
 
                 java.util.ArrayList<beans.ItemBean> availableRlts = (java.util.ArrayList<beans.ItemBean>) request.getAttribute("item_list");
-                out.println("<table border=1>");
-                out.print("<tr>");
-                out.print("<th> ID </th>");
-                out.print("<th> NAME </th>");
-                out.print("<th> HEAT</th>");
-                out.print("<th> AVAILABILITY</th>");
-                out.print("</tr>");
-                for (ItemBean ib : availableRlts) {
-                    out.print("<tr>");
-                    out.print("<th>" + ib.getId() + "</th>");
-                    out.print("<th>" + ib.getName() + "</th>");
-                    out.print("<th>" + ib.getHeat() + "</th>");
-                    out.print("<th>" + ib.getAvailable() + "</th>");
-                    out.print("</tr>");
-                }
-
-                out.println("</table>");
-                out.println("<table border=1>");
-                out.print("<tr><td colspan=\"4\" align=\"center\">"
-                        + "You are Using Below Items</td></tr>");
-                out.print("<tr>");
-                out.print("<th> ID </th>");
-                out.print("<th> NAME </th>");
-                out.print("<th> HEAT</th>");
-                out.print("<th> AVAILABILITY</th>");
-                out.print("</tr>");
-                java.util.ArrayList<beans.ItemBean> usingRlts = (java.util.ArrayList<beans.ItemBean>) request.getAttribute("under_use_list");
-                out.print(usingRlts.size());
-                for (ItemBean ib : usingRlts) {
-                    out.print("<tr>");
-                    out.print("<th>" + ib.getId() + "</th>");
-                    out.print("<th>" + ib.getName() + "</th>");
-                    out.print("<th>" + ib.getHeat() + "</th>");
-                    out.print("<th>" + ib.getAvailable() + "</th>");
-                    out.print("</tr>");
-                }
-                out.println("</table>");
+//                out.println("<table border=1>");
+//                out.print("<tr>");
+//                out.print("<tr><td colspan=\"4\" align=\"center\">"
+//                        + "Available Items</td></tr>");
+//                need to check the text length
+//                out.print("<tr><td colspan=\"4\" align=\"center\">"
+//                        + "<form action=\"http://localhost:8080/MultiTier/RegistrationServlet\"><input type=\"text\" required> <input type=\"submit\" "
+//                        + "value=\"Acquire\"></form></td></tr>");
             
       out.write("\n");
+      out.write("        <table border=\"1\">        \n");
+      out.write("            <tr><td colspan=\\\"4\\\" align=\\\"center\\\">Available Items</td></tr>\n");
+      out.write("            <tr>\n");
+      out.write("                <td colspan=\"4\" align=\"center\">\n");
+      out.write("                    <form action=http://localhost:8080/MultiTier/RegistrationServlet>\n");
+      out.write("                        <input type=\"text\" required> \n");
+      out.write("                        <input type=\"submit\" value=\"Acquire\">\n");
+      out.write("                    </form>\n");
+      out.write("                </td>\n");
+      out.write("            </tr>\n");
+      out.write("            <th>ID</th>\n");
+      out.write("            <th>NAME</th>\n");
+      out.write("            <th>AVAILABILITY</th>\n");
+      out.write("                ");
+
+                    //                make a servlet for acquiring
+                    out.print("<th> ID </th>");
+                    out.print("<th> NAME </th>");
+                    out.print("<th> HEAT</th>");
+                    out.print("<th> AVAILABILITY</th>");
+                    out.print("</tr>");
+                    for (ItemBean ib : availableRlts) {
+                        out.print("<tr>");
+                        out.print("<th>" + ib.getId() + "</th>");
+                        out.print("<th>" + ib.getName() + "</th>");
+                        out.print("<th>" + ib.getHeat() + "</th>");
+                        out.print("<th>" + ib.getAvailable() + "</th>");
+                        out.print("</tr>");
+                    }
+
+                    out.println("</table>");
+                    out.println("<table border=1>");
+                    out.print("<tr><td colspan=\"4\" align=\"center\">"
+                            + "You are Using Below Items</td></tr>");
+                    out.print("<tr><td colspan=\"4\" align=\"center\">"
+                            + "<form action=\"http://localhost:8080/MultiTier/RegistrationServlet\"> <input type=\"text\" required> <input type=\"submit\" "
+                            + "value=\"Return!\"></form></td></tr>");
+                    //                make a servlet for returning process
+                    out.print("<tr>");
+                    out.print("<th> ID </th>");
+                    out.print("<th> NAME </th>");
+                    out.print("<th> HEAT</th>");
+                    out.print("<th> AVAILABILITY</th>");
+                    out.print("</tr>");
+                    java.util.ArrayList<beans.ItemBean> usingRlts = (java.util.ArrayList<beans.ItemBean>) request.getAttribute("under_use_list");
+                    //                out.print(usingRlts.size());
+                    for (ItemBean ib : usingRlts) {
+                        out.print("<tr>");
+                        out.print("<th>" + ib.getId() + "</th>");
+                        out.print("<th>" + ib.getName() + "</th>");
+                        out.print("<th>" + ib.getHeat() + "</th>");
+                        out.print("<th>" + ib.getAvailable() + "</th>");
+                        out.print("</tr>");
+                    }
+                    out.println("</table>");
+                
+      out.write("\n");
       out.write("        </p>\n");
+      out.write("\n");
+      out.write("</body>\n");
       out.write("</html>\n");
     } catch (Throwable t) {
       if (!(t instanceof SkipPageException)){

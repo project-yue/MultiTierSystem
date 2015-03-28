@@ -30,48 +30,56 @@
             and used <jsp:getProperty name="user" property="use" /> items
         </p>
         <p><a HREF="/MultiTier/index.jsp">Return</a></p>
-        <p>
-            <%
-                java.util.ArrayList<beans.ItemBean> availableRlts = (java.util.ArrayList<beans.ItemBean>) request.getAttribute("item_list");
-                out.println("<table border=1>");
-                out.print("<tr>");
-                out.print("<tr><td colspan=\"4\" align=\"center\">"
-                        + "Available Items</td></tr>");
-//                need to check the text length
-                out.print("<tr><td colspan=\"4\" align=\"center\">"
-                        + "<form action=\"http://localhost:8080/MultiTier/RegistrationServlet\"><input type=\"text\" required> <input type=\"submit\" "
-                        + "value=\"Acquire\"></form></td></tr>");
-//                make a servlet for acquiring
-                out.print("<th> ID </th>");
-                out.print("<th> NAME </th>");
-                out.print("<th> HEAT</th>");
-                out.print("<th> AVAILABILITY</th>");
-                out.print("</tr>");
-                for (ItemBean ib : availableRlts) {
-                    out.print("<tr>");
-                    out.print("<th>" + ib.getId() + "</th>");
-                    out.print("<th>" + ib.getName() + "</th>");
-                    out.print("<th>" + ib.getHeat() + "</th>");
-                    out.print("<th>" + ib.getAvailable() + "</th>");
-                    out.print("</tr>");
-                }
+        <table border="1">        
+            <tr>
+            <tr>
+                <td colspan="4" align="center">Available Items</td>
+            </tr>
+            <tr>
+                <td colspan="4" align="center">
+                    <form action=http://localhost:8080/MultiTier/RegistrationServlet>
+                        <input type="text" required> 
+                        <input type="submit" value="Acquire">
+                    </form>
+                </td>
+            </tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th> HEAT</th>
+            <th>AVAILABILITY</th>
+                <%
+                    java.util.ArrayList<beans.ItemBean> availableRlts = (java.util.ArrayList<beans.ItemBean>) request.getAttribute("item_list");
+                    for (ItemBean ib : availableRlts) {
+                        out.print("<tr>");
+                        out.print("<th>" + ib.getId() + "</th>");
+                        out.print("<th>" + ib.getName() + "</th>");
+                        out.print("<th>" + ib.getHeat() + "</th>");
+                        out.print("<th>" + ib.getAvailable() + "</th>");
+                        out.print("</tr>");
+                    }
+                %>
+        </table>
+        <table border=1>
+            <tr>
+                <td colspan="4" align="center">You are Using Below Items</td>
+            </tr>
+            <tr>
+                <td colspan="4" align="center">
+                    <form action="http://localhost:8080/MultiTier/RegistrationServlet">
+                        <input type="text" required> 
+                        <input type="submit"value="Return!">
+                    </form>
+                </td>
+            </tr>
 
-                out.println("</table>");
-                out.println("<table border=1>");
-                out.print("<tr><td colspan=\"4\" align=\"center\">"
-                        + "You are Using Below Items</td></tr>");
-                out.print("<tr><td colspan=\"4\" align=\"center\">"
-                        + "<form action=\"http://localhost:8080/MultiTier/RegistrationServlet\"> <input type=\"text\" required> <input type=\"submit\" "
-                        + "value=\"Return!\"></form></td></tr>");
-//                make a servlet for returning process
-                out.print("<tr>");
-                out.print("<th> ID </th>");
-                out.print("<th> NAME </th>");
-                out.print("<th> HEAT</th>");
-                out.print("<th> AVAILABILITY</th>");
-                out.print("</tr>");
+            <tr>
+                <th> ID </th>
+                <th> NAME </th>
+                <th> HEAT</th>
+                <th> AVAILABILITY</th>
+            </tr>
+            <%
                 java.util.ArrayList<beans.ItemBean> usingRlts = (java.util.ArrayList<beans.ItemBean>) request.getAttribute("under_use_list");
-//                out.print(usingRlts.size());
                 for (ItemBean ib : usingRlts) {
                     out.print("<tr>");
                     out.print("<th>" + ib.getId() + "</th>");
@@ -80,9 +88,8 @@
                     out.print("<th>" + ib.getAvailable() + "</th>");
                     out.print("</tr>");
                 }
-                out.println("</table>");
             %>
-        </p>
+        </table>
 
     </body>
 </html>

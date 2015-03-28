@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 public class UserDatabase {
 
     private final String URL = "jdbc:derby://localhost:1527/ass1DB;create=true";
-    private final String USR_TBL_NAME = "DB_User";
+    private final String USR_TBL = "DB_User";
     private final String[] USR_TBL_ATTRIBUTES = {"USER_ID", "USER_NAME", "USER_PWD", "SHARED", "USED"};
     private final String ITEM_TBL = "DB_Item";
     private final String[] ITEM_TBL_ATTRIBUTES = {"ITEM_ID", "ITEM_NAME", "HEAT", "AVAILABLE"};
@@ -46,9 +46,14 @@ public class UserDatabase {
         }
 
         String[] test = db.getUserTradeRecords("hello");
-        System.out.println("Hello! " + test[1] + ", You have sold " + test[4]
-                + " , and bought " + test[3] + "item(s)");
+        System.out.println("Hello! " + test[1] + ", You have shared " + test[4]
+                + " , and used " + test[3] + "item(s)");
         db.addNewItem("re", true);
+        db.incrementUserAttribute("hello", "SHARED");
+        db.disableItemAvailability(1);
+        db.enableItemAvailability(1);
+        db.getItemRecords(1);
+        db.increaseItemHeatByOne(1);
     }
 
     public static UserDatabase INIT_DB() {
@@ -81,7 +86,7 @@ public class UserDatabase {
     private void createUserTable() {
         try {
             Statement statement = conn.createStatement();
-            String sqlCreate = "CREATE TABLE " + this.USR_TBL_NAME + "(" + this.USR_TBL_ATTRIBUTES[0]
+            String sqlCreate = "CREATE TABLE " + this.USR_TBL + "(" + this.USR_TBL_ATTRIBUTES[0]
                     + " VARCHAR(25) NOT NULL, " + this.USR_TBL_ATTRIBUTES[1] + " VARCHAR(30),"
                     + " " + this.USR_TBL_ATTRIBUTES[2] + " VARCHAR(16) NOT NULL,"
                     + " " + this.USR_TBL_ATTRIBUTES[3] + " INTEGER, " + this.USR_TBL_ATTRIBUTES[4]
@@ -131,7 +136,7 @@ public class UserDatabase {
         boolean result = false;
         try {
             DatabaseMetaData dbm = conn.getMetaData();
-            ResultSet tables = dbm.getTables(null, null, this.USR_TBL_NAME.toUpperCase(), null);
+            ResultSet tables = dbm.getTables(null, null, this.USR_TBL.toUpperCase(), null);
             if (tables.next()) {
                 result = true;
             }
@@ -153,7 +158,7 @@ public class UserDatabase {
         try {
             Statement statement = this.conn.createStatement();
             String selectAccountPwd = "SELECT " + this.USR_TBL_ATTRIBUTES[2]
-                    + " from " + this.USR_TBL_NAME + " where "
+                    + " from " + this.USR_TBL + " where "
                     + this.USR_TBL_ATTRIBUTES[0] + " = '" + account + "'";
             ResultSet rs = statement.executeQuery(selectAccountPwd);
             while (rs.next()) {
@@ -178,7 +183,7 @@ public class UserDatabase {
         try {
             Statement statement = conn.createStatement();
             String selectComm = "SELECT " + this.USR_TBL_ATTRIBUTES[0]
-                    + " from " + this.USR_TBL_NAME + " where "
+                    + " from " + this.USR_TBL + " where "
                     + this.USR_TBL_ATTRIBUTES[0] + " = '" + usr_id + "'";
             ResultSet rs = statement.executeQuery(selectComm);
             while (rs.next()) {
@@ -203,7 +208,7 @@ public class UserDatabase {
     public void addNewUser(String userId, String userName, String pwd) {
         try {
             Statement statement = conn.createStatement();
-            String sqlUpdate = "INSERT INTO " + this.USR_TBL_NAME + " values("
+            String sqlUpdate = "INSERT INTO " + this.USR_TBL + " values("
                     + "'" + userId + "', '" + userName + "', '" + pwd
                     + "', " + "0, " + "0)";
             statement.executeUpdate(sqlUpdate);
@@ -249,7 +254,7 @@ public class UserDatabase {
     public String[] getUserTradeRecords(String id) {
         String[] record = new String[5];
         String query = "SELECT " + "*"
-                + " from " + this.USR_TBL_NAME + " where "
+                + " from " + this.USR_TBL + " where "
                 + this.USR_TBL_ATTRIBUTES[0] + " = '" + id + "'";
         try {
             Statement statement = this.conn.createStatement();
@@ -276,20 +281,26 @@ public class UserDatabase {
     public void incrementUserAttribute(String userId, String attribute) {
         String[] record = getUserTradeRecords(userId);
         int currentValue;
-        boolean isShared = false;
-        if (attribute.equalsIgnoreCase(this.USR_TBL_ATTRIBUTES[3])) {
+        //"USER_ID", "USER_NAME", "USER_PWD", "SHARED", "USED"
+        boolean isShared = attribute.equalsIgnoreCase(this.USR_TBL_ATTRIBUTES[3]);
+        //  pass string to validate whether it is a shared or used attribute
+        if (isShared) {
             currentValue = Integer.parseInt(record[3]);
-            isShared = true;
         } else {
             currentValue = Integer.parseInt(record[4]);
         }
         currentValue++;
         try {
             Statement st = conn.createStatement();
-            String sqlUpdate = null;
+            String sqlUpdate = "UPDATE " + this.USR_TBL + " SET ";
             if (isShared) {
-                sqlUpdate = "UPDATE " + this.USR_TBL_NAME + " SET " + this.USR_TBL_ATTRIBUTES[4];
+                sqlUpdate += this.USR_TBL_ATTRIBUTES[3];
+            } else {
+                sqlUpdate += this.USR_TBL_ATTRIBUTES[4];
             }
+            sqlUpdate += " = " + currentValue + " WHERE "
+                    + this.USR_TBL_ATTRIBUTES[0] + " = '" + userId + "'";
+            System.out.println(sqlUpdate);
             st.executeUpdate(sqlUpdate);
         } catch (SQLException ex) {
             Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
@@ -297,6 +308,28 @@ public class UserDatabase {
     }
 
 //----------------Item table updates----------------------------------------------------
+    public String[] getItemRecords(int id) {
+        // "ITEM_ID", "ITEM_NAME", "HEAT", "AVAILABLE"
+        String[] record = new String[4];
+        String query = "SELECT " + "*"
+                + " from " + this.ITEM_TBL + " where "
+                + this.ITEM_TBL_ATTRIBUTES[0] + " = " + id;
+        try {
+            Statement statement = this.conn.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+            if (rs.next()) {
+                record[0] = rs.getString(this.ITEM_TBL_ATTRIBUTES[0]);
+                record[1] = rs.getString(this.ITEM_TBL_ATTRIBUTES[1]);
+                record[2] = Integer.toString(rs.getInt(this.ITEM_TBL_ATTRIBUTES[2]));
+                record[3] = Boolean.toString(rs.getBoolean(this.ITEM_TBL_ATTRIBUTES[2]));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return record;
+    }
+
     public void addNewItem(String name, boolean available) {
         try {
             try (Statement statement = conn.createStatement()) {
@@ -306,6 +339,45 @@ public class UserDatabase {
                 statement.executeUpdate(sqlUpdate);
             }
             System.out.println("new item: " + name + " added");
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void enableItemAvailability(int id) {
+        try (Statement statement = conn.createStatement()) {
+//            "ITEM_ID", "ITEM_NAME", "HEAT", "AVAILABLE"
+            String sqlUpdate = "UPDATE " + this.ITEM_TBL + " SET "
+                    + this.ITEM_TBL_ATTRIBUTES[3] + " = " + true
+                    + " WHERE " + this.ITEM_TBL_ATTRIBUTES[0] + " = " + id;
+            statement.executeUpdate(sqlUpdate);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void disableItemAvailability(int id) {
+        try (Statement statement = conn.createStatement()) {
+//            "ITEM_ID", "ITEM_NAME", "HEAT", "AVAILABLE"
+            String sqlUpdate = "UPDATE " + this.ITEM_TBL + " SET "
+                    + this.ITEM_TBL_ATTRIBUTES[3] + " = " + false
+                    + " WHERE " + this.ITEM_TBL_ATTRIBUTES[0] + " = " + id;
+            statement.executeUpdate(sqlUpdate);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void increaseItemHeatByOne(int id) {
+        String[] record = getItemRecords(id);
+        int val = Integer.parseInt(record[2]);
+        val++;
+        try (Statement statement = conn.createStatement()) {
+//            "ITEM_ID", "ITEM_NAME", "HEAT", "AVAILABLE"
+            String sqlUpdate = "UPDATE " + this.ITEM_TBL + " SET "
+                    + this.ITEM_TBL_ATTRIBUTES[2] + " = " + val
+                    + " WHERE " + this.ITEM_TBL_ATTRIBUTES[0] + " = " + id;
+            statement.executeUpdate(sqlUpdate);
         } catch (SQLException ex) {
             Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
         }
