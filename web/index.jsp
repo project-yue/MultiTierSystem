@@ -1,7 +1,7 @@
 <%-- 
     Document   : index
     Created on : 21/03/2015, 12:45:41 PM
-    Author     : Yue Li 1251124
+    Author     : Yue Li 1251124 Jiajie Ji 1127766
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8" import="java.io.*, java.util.*"%>
@@ -39,7 +39,7 @@
         <title>Sharing Unwanted</title>
     </head>
     <body>
-        <jsp:useBean id="user" class="beans.UserBean" scope="session">
+        <jsp:useBean id="user" class="beans.UserBean" scope="request">
             <jsp:setProperty name="user" 
                              property="id"
                              value = "guest"/>
@@ -59,12 +59,6 @@
 
         <h3>Hello, welcome to Sharing unwanted. A place for people to share items for free</h3>
 
-        <h4>
-            Hello, <jsp:getProperty name="user" property="name"/> 
-            (<jsp:getProperty name="user" property="id" />)<br/>
-        </h4>
-        <p>You have shared <jsp:getProperty name="user" property="share" />,
-            and used <jsp:getProperty name="user" property="use" /> items</p>
 
         <h1>Login</h1>
         <%@ page import = "javax.servlet.RequestDispatcher" %>

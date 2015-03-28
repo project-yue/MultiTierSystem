@@ -29,6 +29,7 @@
         <p>You have shared <jsp:getProperty name="user" property="share" />,
             and used <jsp:getProperty name="user" property="use" /> items
         </p>
+        <p><a HREF="/MultiTier/index.jsp">Return</a></p>
         <p>
             <%
                 java.util.ArrayList<beans.ItemBean> availableRlts = (java.util.ArrayList<beans.ItemBean>) request.getAttribute("item_list");
@@ -82,4 +83,6 @@
                 out.println("</table>");
             %>
         </p>
+
+    </body>
 </html>

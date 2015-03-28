@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -44,6 +43,7 @@ public class LogonServlet extends HttpServlet {
             out.println("<title>Servlet LogonServlet</title>");
             out.println("</head>");
             out.println("<body>");
+            System.out.println(request.getParameter("user") == null);
             if (udb.doesAccountExist(request.getParameter("usr_id"))
                     && udb.matchPasswords(request.getParameter("usr_pwd"), request.getParameter("usr_id"))) {
                 String[] rlt = udb.getUserTradeRecords(request.getParameter("usr_id"));
@@ -53,6 +53,24 @@ public class LogonServlet extends HttpServlet {
                 ub.setPwd(rlt[2]);
                 ub.setShare(Integer.parseInt(rlt[3]));
                 ub.setUse(Integer.parseInt(rlt[4]));
+                request.setAttribute("user", ub);
+                try {
+                    request.setAttribute("item_list", udb.getAvailableItemsList());
+                    request.setAttribute("under_use_list", udb.getUserItemsList(request.getParameter("usr_id")));
+                } catch (Exception ex) {
+                    Logger.getLogger(LogonServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                udb.closeConnections();
+                request.getRequestDispatcher("/items_list.jsp").
+                        forward(request, response);
+            } else if (request.getAttribute("user") != null) {
+                UserBean ub1 = (UserBean) request.getAttribute("user");
+                UserBean ub = new UserBean();
+                ub.setId(ub1.getId());
+                ub.setName(ub1.getName());
+                ub.setPwd(ub1.getPwd());
+                ub.setShare(ub1.getShare());
+                ub.setUse(ub1.getUse());
                 request.setAttribute("user", ub);
                 try {
                     request.setAttribute("item_list", udb.getAvailableItemsList());

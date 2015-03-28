@@ -5,12 +5,12 @@
  */
 package servlets;
 
+import beans.UserBean;
 import database.UserDatabase;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,40 +33,52 @@ public class RegistrationServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        response.setContentType("text/html;charset=UTF-8");
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-//        out.println("<p>hi</p>");
-//        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-        out.println("<!DOCTYPE html>");
-        out.println("<html>");
-        out.println("<head>");
-        out.println("<title>Servlet RegistrationServlet</title>");
-        out.println("</head>");
-        out.println("<body>");
-        out.println("<h1>Servlet RegistrationServlet at " + request.getContextPath() + "</h1>");
-        out.println("</body>");
-        out.println("</html>");
+//        response.setContentType("text/html");
+//        PrintWriter out = response.getWriter();
+//        out.println("<!DOCTYPE html>");
+//        out.println("<html>");
+//        out.println("<head>");
+//        out.println("<title>Servlet RegistrationServlet</title>");
+//        out.println("</head>");
+//        out.println("<body>");
+        register(request, response);
+//        out.println("<h1>Servlet RegistrationServlet at " + request.getContextPath() + "</h1>");
+//        out.println("</body>");
+//        out.println("</html>");
     }
 //}
 
     private void register(HttpServletRequest request, HttpServletResponse response) {
         UserDatabase db = new UserDatabase();
         db.establishConnection();
-        boolean isAccountUsed = db.doesAccountExist("name");
-        if (isAccountUsed) {
-            RequestDispatcher dispatcher = getServletContext().
-                    getRequestDispatcher("/account_used.jsp");
-            try {
-                dispatcher.forward(request, response);
+        boolean isAccountUsed = db.doesAccountExist(request.getParameter("id"));
+        try {
+            PrintWriter out = response.getWriter();
 
-            } catch (ServletException | IOException ex) {
-                Logger.getLogger(RegistrationServlet.class
-                        .getName()).log(Level.SEVERE, null, ex);
+            if (isAccountUsed) {
+                out.println("<p>ID: " + request.getParameter("id")
+                        + " has be taken. Please try a different id</p>");
+                out.println("<p><a HREF=\"/MultiTier/index.jsp\">Back to home</a></p>");
+                out.println("<p><a HREF=\"/MultiTier/register.jsp\">Register Again</a></p>");
+            } else {
+                db.addNewUser(request.getParameter("id"), request.getParameter("name"), request.getParameter("pwd"));
+//                String[] rlt = db.getUserTradeRecords(request.getParameter("usr_id"));
+                UserBean ub = new UserBean();
+                ub.setId(request.getParameter("id"));
+                ub.setName(request.getParameter("name"));
+                ub.setPwd(request.getParameter("pwd"));
+                ub.setShare(0);
+                ub.setUse(0);
+                request.setAttribute("user", ub);
+                request.setAttribute("usr_id", request.getParameter("id"));
+                request.setAttribute("usr_pwd", request.getParameter("pwd"));
+                System.out.println(ub + " " + request.getParameter("id") + request.getParameter("pwd"));
+                getServletContext().getRequestDispatcher("/LogonServlet").
+                        forward(request, response);
             }
-        } else {
-            db.addNewUser("hello", "hello", "hello");
+
+        } catch (IOException | ServletException ex) {
+            Logger.getLogger(RegistrationServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
