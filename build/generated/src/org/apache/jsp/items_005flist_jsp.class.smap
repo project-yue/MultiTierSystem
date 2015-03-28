@@ -1,0 +1,16 @@
+SMAP
+items_005flist_jsp.java
+JSP
+*S JSP
+*F
++ 0 items_list.jsp
+items_list.jsp
+*L
+5,20:47
+25,2:67,3
+27,2:73
+29,2:75,3
+31,3:81
+34,39:85
+72,4:124
+*E

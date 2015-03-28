@@ -20,6 +20,10 @@
         <servlet-name>PopulateServlet</servlet-name>
         <servlet-class>servlets.PopulateServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>OrderItemServlet</servlet-name>
+        <servlet-class>servlets.OrderItemServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LogonServlet</servlet-name>
         <url-pattern>/LogonServlet</url-pattern>
@@ -39,6 +43,10 @@
     <servlet-mapping>
         <servlet-name>PopulateServlet</servlet-name>
         <url-pattern>/PopulateServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OrderItemServlet</servlet-name>
+        <url-pattern>/OrderItemServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

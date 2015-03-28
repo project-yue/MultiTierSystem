@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author mk29
+ * @author yue
  */
 public class RegistrationServlet extends HttpServlet {
 
