@@ -61,8 +61,6 @@ public class LogonServlet extends HttpServlet {
                 }
                 request.getRequestDispatcher("/items_list.jsp").
                         forward(request, response);
-//                out.println("<p>Welcome back, " + request.getParameter("usr_id") + "</p>");
-//                out.println("<p><a HREF=\"/MultiTier/index.jsp\">Return to home</a></p>");
             } else if (!udb.matchPasswords(request.getParameter("usr_pwd"), request.getParameter("usr_id"))) {
                 out.println("<p>Password is incorrect</p>");
             } else {

@@ -4,7 +4,6 @@
     Author     : Yue Li 1251124
 --%>
 
-<%--<%@page contentType="text/html" pageEncoding="UTF-8"%>--%>
 <%@page contentType="text/html" pageEncoding="UTF-8" import="java.io.*, java.util.*"%>
 <%
     Date createTime = new Date(request.getSession().getCreationTime());

@@ -4,7 +4,7 @@
     Author     : Yue
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" import="java.io.*, java.util.*, beans.ItemBean"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -23,8 +23,16 @@
         <p>You have shared <jsp:getProperty name="user" property="share" />,
             and used <jsp:getProperty name="user" property="use" /> items
         </p>
-        <%@page import="java.io.*, java.util.*" %>
-        <% List eList = (List) session.getAttribute("item_list");
-            request.setAttribute("eList", eList);
-        %>
+        <p>
+            <%
+                java.util.ArrayList<beans.ItemBean> results = (java.util.ArrayList<beans.ItemBean>) request.getAttribute("item_list");
+                out.print(results.size());
+                for (ItemBean ib : results) {
+                    out.println(ib.getId());
+                    out.println(ib.getName());
+                    out.println(ib.getHeat());
+                    out.println(ib.getAvailable());
+                }
+            %>
+        </p>
 </html>

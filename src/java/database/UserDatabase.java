@@ -56,7 +56,7 @@ public class UserDatabase {
         test = db.getUserTradeRecords("hello");
         System.out.println("Hello! " + test[1] + ", You have sold " + test[4]
                 + " , and bought " + test[3] + "item(s)");
-//        db.addNewItem("re", "11.32", true);
+        db.addNewItem("re", true);
     }
 
     public static UserDatabase INIT_DB() {
@@ -107,7 +107,7 @@ public class UserDatabase {
             String sqlCreate = "CREATE TABLE " + this.ITEM_TBL + "(" + this.ITEM_TBL_ATTRIBUTES[0]
                     + " INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
                     + " " + this.ITEM_TBL_ATTRIBUTES[1] + " VARCHAR(30) NOT NULL ," + this.ITEM_TBL_ATTRIBUTES[2]
-                    + " DECIMAL(16, 2) NOT NULL , " + this.ITEM_TBL_ATTRIBUTES[3] + " BOOLEAN,"
+                    + " INTEGER, " + this.ITEM_TBL_ATTRIBUTES[3] + " BOOLEAN,"
                     + " CONSTRAINT primary_key PRIMARY KEY (" + this.ITEM_TBL_ATTRIBUTES[0] + "))";
             statement.executeUpdate(sqlCreate);
             System.out.println("Item table created");
@@ -295,8 +295,8 @@ public class UserDatabase {
 //            double val = Double.parseDouble(price);
 //            System.out.println(val);
             String sqlUpdate = "INSERT INTO " + this.ITEM_TBL + " (" + this.ITEM_TBL_ATTRIBUTES[1]
-                    + ", " + this.ITEM_TBL_ATTRIBUTES[3] + ")"
-                    + " values(" + "'" + name + "', " + available + ")";
+                    + ")"
+                    + " values('" + name + "')";
             statement.executeUpdate(sqlUpdate);
             statement.close();
             System.out.println("new item: " + name + " added");
