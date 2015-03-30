@@ -247,8 +247,8 @@ public class UserDatabase {
 //        "ITEM_ID", "ITEM_NAME", "HEAT", "AVAILABLE"
         List<ItemBean> result = new ArrayList<>();
         Statement stmt = conn.createStatement();
-        String query = "select * from " + this.ITEM_TBL
-                + " where " + ITEM_TBL_ATTRIBUTES[3] + "= \'" + userId + "\'";
+        String query = "SELECT * FROM " + this.ITEM_TBL
+                + " WHERE " + ITEM_TBL_ATTRIBUTES[3] + "= \'" + userId + "\'";
         System.out.println("user item list query " + query);
         ResultSet rs = stmt.executeQuery(query);
         while (rs.next()) {

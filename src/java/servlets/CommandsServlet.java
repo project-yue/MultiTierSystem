@@ -22,6 +22,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class CommandsServlet extends HttpServlet {
 
+    private final String[] USER_INFO = {"id", "name", "pwd", "shared", "used"};
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -52,13 +54,6 @@ public class CommandsServlet extends HttpServlet {
         for (Cookie cookie : cookieLst) {
             response.addCookie(cookie);
         }
-        try {
-            request.setAttribute("item_list", udb.getAvailableItemsList());
-            request.setAttribute("under_use_list", udb.getUserItemsList(request.getParameter("id")));
-            request.setAttribute("cookies", cookieLst);
-        } catch (Exception ex) {
-            Logger.getLogger(LogonServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
         switch (requests) {
             case "list":
                 // text               
@@ -66,6 +61,7 @@ public class CommandsServlet extends HttpServlet {
                 udb.addNewItem(task1);
                 udb.incrementUserAttribute(usr, "SHARED");
 //                response.sendRedirect("task_complete.jsp");
+                dbUpdate(request, udb, cookieLst, results);
                 request.getRequestDispatcher("/login_success.jsp").forward(request, response);
                 break;
             case "return":
@@ -73,6 +69,7 @@ public class CommandsServlet extends HttpServlet {
                 String task2 = request.getParameter("select_input");
                 udb.unassignItemFrom(Integer.parseInt(task2));
 //                response.sendRedirect("task_complete.jsp");
+                dbUpdate(request, udb, cookieLst, results);
                 request.getRequestDispatcher("/login_success.jsp").forward(request, response);
                 break;
             case "use":
@@ -84,6 +81,7 @@ public class CommandsServlet extends HttpServlet {
                     udb.assginItemTo(Integer.parseInt(task3), usr);
                     udb.increaseItemHeatByOne(Integer.parseInt(task3));
                     udb.incrementUserAttribute(usr, "USED");
+                    dbUpdate(request, udb, cookieLst, results);
                     request.getRequestDispatcher("/login_success.jsp").forward(request, response);
 //                    response.sendRedirect("task_complete.jsp");
                 }
@@ -92,6 +90,18 @@ public class CommandsServlet extends HttpServlet {
                 break;
         }
 
+    }
+
+    private void dbUpdate(HttpServletRequest request, UserDatabase udb, ArrayList<Cookie> cookieLst, String[] results) {
+        try {
+            request.setAttribute("item_list", udb.getAvailableItemsList());
+            request.setAttribute("under_use_list", udb.getUserItemsList(results[0]));
+            request.setAttribute("cookies", cookieLst);
+            request.setAttribute("id", results[0]);
+            request.setAttribute("pwd", results[2]);
+        } catch (Exception ex) {
+            Logger.getLogger(LogonServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

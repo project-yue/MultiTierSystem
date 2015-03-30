@@ -82,20 +82,17 @@ public class LoginServlet extends HttpServlet {
         boolean result = false;
         UserDatabase udb = new UserDatabase();
         udb.establishConnection();
-        if (request.getParameter("id") != null
+        if (request.getAttribute("id") != null) {
+            String id = request.getAttribute("id").toString();
+            String pwd = request.getAttribute("pwd").toString();
+            
+        } else if (request.getParameter("id") != null
                 && udb.doesAccountExist(request.getParameter("id"))
                 && udb.matchPasswords(request.getParameter("pwd"), request.getParameter("id"))) {
             result = true;
             String[] results = udb.getUserTradeRecords(request.getParameter("id"));
-//                UserBean eb = (UserBean) request.getSession().getAttribute("user");
-//            UserBean eb = new UserBean();
             System.out.println(results[0] + " " + results[1] + " "
                     + results[2] + " " + results[3] + " " + results[4]);
-//            eb.setId(results[0]);
-//            eb.setName(results[1]);
-//            eb.setPwd(results[2]);
-//            eb.setShare(results[3]);
-//            eb.setUse(results[4]);
             ArrayList<Cookie> cookieLst = new ArrayList<>();
             Cookie c1 = new Cookie("id", results[0]);
             cookieLst.add(c1);
@@ -119,7 +116,6 @@ public class LoginServlet extends HttpServlet {
             }
             try {
                 request.getRequestDispatcher("login_success.jsp").forward(request, response);
-//                response.sendRedirect("login_success.jsp");
             } catch (IOException | ServletException ex) {
                 Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
