@@ -1,0 +1,16 @@
+This assignment 1 is for Distributed Mobile Systems at AUT.
+
+Yue Li 1251124 Jiajie Ji 1127766
+
+Developed a website for people to share their spare items to community.
+This website is used to achieve such goal.
+
+In order to use the features, user must logon to the website.
+By registering their faviorite usernames and ids.
+
+Then users can make a new item available on the site.
+User can use available items.
+User can return the items once they no longer need.
+
+While users' participations, the system tracks hotest items, number of items people shared and used.
+
