@@ -16,7 +16,7 @@ public class ItemBean implements Serializable {
     private String id;
     private String name;
     private int heat;
-    private boolean available;
+    private String available;
 
     public String getId() {
         return id;
@@ -42,11 +42,11 @@ public class ItemBean implements Serializable {
         this.heat = heat;
     }
 
-    public boolean getAvailable() {
+    public String getAvailable() {
         return this.available;
     }
 
-    public void setAvailable(boolean available) {
+    public void setAvailable(String available) {
         this.available = available;
     }
 }

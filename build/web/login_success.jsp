@@ -1,10 +1,11 @@
 <%-- 
-    Document   : items_list
-    Created on : 28/03/2015, 11:31:06 AM
-    Author     : Yue
+    Document   : login_success
+    Created on : 27/03/2015, 11:13:41 AM
+    Author     : yue
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8" import="java.io.*, java.util.*, beans.ItemBean"%>
+<%@page import="beans.ItemBean"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -18,15 +19,33 @@
         </style>
     </head>
     <body>
-
         <h3>Hello, welcome to Sharing unwanted. A place for people to share items for free</h3>
         <%@page import="java.io.*, java.util.*, beans.UserBean, database.UserDatabase"%>
+        <jsp:useBean id="user" class="beans.UserBean" scope="request">
+
+        </jsp:useBean>
+        <%
+            // set up user bean
+            UserBean eb = new UserBean();
+//            UserBean eb = (UserBean) request.getAttribute("user");
+            // session is at index 0
+            ArrayList<Cookie> cookieLst = (ArrayList<Cookie>) request.getAttribute("cookies");
+            eb.setId(cookieLst.get(0).getValue());
+            eb.setName(cookieLst.get(1).getValue());
+            eb.setPwd(cookieLst.get(2).getValue());
+            eb.setShare(cookieLst.get(3).getValue());
+            eb.setUse(cookieLst.get(4).getValue());
+            request.setAttribute("user", eb);
+            request.setAttribute("id", eb.getId());
+        %>
+
+
         <h4>
             Hello, <jsp:getProperty name="user" property="name"/> 
             (<jsp:getProperty name="user" property="id" />)<br/>
         </h4>
-
-        <p>You have shared <jsp:getProperty name="user" property="share" />,
+        <p>
+            You have shared <jsp:getProperty name="user" property="share" />,
             and used <jsp:getProperty name="user" property="use" /> items
         </p>
         <form action="http://localhost:8080/MultiTier/CommandsServlet">
@@ -36,11 +55,15 @@
                 <option value="use">Use Item</option>
             </select>
             <input type="text" name="select_input">
+            <input type="text" hidden name="usr_id" value="<%= eb.getId()%>">
+            <input type="text" hidden name="usr_pwd" value="<% eb.getPwd(); %>">
             <input type="submit" />
         </form>
-        <p><a HREF="/MultiTier/index.jsp">
-                <% request.getSession().invalidate(); %>
-                Logout</a></p>
+        <p>
+            <a HREF="/MultiTier/index.jsp">
+                <% request.getSession().invalidate();%>
+                Logout</a>
+        </p>
         <table border="1">        
             <tr>
             <tr>
@@ -101,6 +124,5 @@
                 }
             %>
         </table>
-
     </body>
 </html>

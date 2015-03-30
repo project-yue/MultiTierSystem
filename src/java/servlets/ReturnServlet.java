@@ -5,12 +5,9 @@
  */
 package servlets;
 
-import beans.UserBean;
 import database.UserDatabase;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,9 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author yue
+ * @author mk29
  */
-public class RegistrationServlet extends HttpServlet {
+public class ReturnServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,35 +30,14 @@ public class RegistrationServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        register(request, response);
-    }
-    
-    private void register(HttpServletRequest request, HttpServletResponse response) {
-        UserDatabase db = new UserDatabase();
-        db.establishConnection();
-        boolean isAccountUsed = db.doesAccountExist(request.getParameter("id"));
-        try {
-            PrintWriter out = response.getWriter();
-            
-            if (isAccountUsed) {
-                out.println("<p>ID: " + request.getParameter("id")
-                        + " has be taken. Please try a different id</p>");
-                out.println("<p><a HREF=\"/MultiTier/index.jsp\">Back to home</a></p>");
-                out.println("<p><a HREF=\"/MultiTier/register.jsp\">Register Again</a></p>");
-            } else {
-                db.addNewUser(request.getParameter("id"), request.getParameter("name"), request.getParameter("pwd"));
-                UserBean ub = (UserBean) request.getSession().getAttribute("user");
-                ub.setId(request.getParameter("id"));
-                ub.setName(request.getParameter("name"));
-                ub.setPwd(request.getParameter("pwd"));
-                request.getSession().setAttribute("user", ub);
-                getServletContext().getRequestDispatcher("/LogonServlet").
-                        forward(request, response);
-            }
-            
-        } catch (IOException | ServletException ex) {
-            Logger.getLogger(RegistrationServlet.class.getName()).log(Level.SEVERE, null, ex);
+        try (PrintWriter out = response.getWriter()) {
+//            /* TODO output your page here. You may use following sample code. */
+            UserDatabase udb = UserDatabase.INIT_DB();
+            udb.unassignItemFrom(Integer.parseInt(request.getParameter("item_id")));
+            request.getRequestDispatcher("/task_complete.jsp").
+                    forward(request, response);
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

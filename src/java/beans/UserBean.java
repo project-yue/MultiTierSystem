@@ -12,8 +12,8 @@ public class UserBean implements Serializable {
     private String id;
     private String name;
     private String pwd;
-    private int share;
-    private int use;
+    private String share;
+    private String use;
 
     private PropertyChangeSupport propertySupport;
 
@@ -47,19 +47,19 @@ public class UserBean implements Serializable {
         this.pwd = pwd;
     }
 
-    public int getShare() {
+    public String getShare() {
         return this.share;
     }
 
-    public void setShare(int value) {
+    public void setShare(String value) {
         this.share = value;
     }
 
-    public int getUse() {
+    public String getUse() {
         return this.use;
     }
 
-    public void setUse(int value) {
+    public void setUse(String value) {
         this.use = value;
     }
 

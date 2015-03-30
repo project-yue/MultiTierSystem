@@ -6,9 +6,17 @@
             <file>file:/home/mk29/Yue/StudyAUT/2015/sem1/DSM/assignments/MultiTier/src/java/database/UserDatabase.java</file>
         </group>
         <group>
+            <file>file:/home/mk29/Yue/StudyAUT/2015/sem1/DSM/assignments/MultiTier/src/java/servlets/LoginServlet.java</file>
+            <file>file:/home/mk29/Yue/StudyAUT/2015/sem1/DSM/assignments/MultiTier/src/java/database/UserDatabase.java</file>
+            <file>file:/home/mk29/Yue/StudyAUT/2015/sem1/DSM/assignments/MultiTier/src/java/servlets/ShareServlet.java</file>
+            <file>file:/home/mk29/Yue/StudyAUT/2015/sem1/DSM/assignments/MultiTier/src/java/servlets/UserServlet.java</file>
+            <file>file:/home/mk29/Yue/StudyAUT/2015/sem1/DSM/assignments/MultiTier/src/java/servlets/ReturnServlet.java</file>
             <file>file:/home/mk29/Yue/StudyAUT/2015/sem1/DSM/assignments/MultiTier/src/java/servlets/LogonServlet.java</file>
             <file>file:/home/mk29/Yue/StudyAUT/2015/sem1/DSM/assignments/MultiTier/web/items_list.jsp</file>
-            <file>file:/home/mk29/Yue/StudyAUT/2015/sem1/DSM/assignments/MultiTier/src/java/servlets/RegistrationServlet.java</file>
+            <file>file:/home/mk29/Yue/StudyAUT/2015/sem1/DSM/assignments/MultiTier/web/return_item_form.jsp</file>
+            <file>file:/home/mk29/Yue/StudyAUT/2015/sem1/DSM/assignments/MultiTier/web/use_item_form.jsp</file>
+            <file>file:/home/mk29/Yue/StudyAUT/2015/sem1/DSM/assignments/MultiTier/src/java/servlets/CommandsServlet.java</file>
+            <file>file:/home/mk29/Yue/StudyAUT/2015/sem1/DSM/assignments/MultiTier/src/java/servlets/RegisterServlet.java</file>
         </group>
     </open-files>
 </project-private>

@@ -8,29 +8,13 @@
 <%
     Date createTime = new Date(request.getSession().getCreationTime());
     Date lastAccessTime = new Date(request.getSession().getLastAccessedTime());
-    String title = "Welcome Back to Share Unwanted";
     Integer visitCount = new Integer(0);
     String visitCountKey = new String("visitCount");
-    String userIDKey = new String("userID");
-    String userID = new String("Stranger");
-    String greeting = "";
-
-    // Check if this is new comer on your web page.
     if (request.getSession().isNew()) {
-        title = "Welcome to my website";
-        request.getSession().setAttribute(userIDKey, userID);
         request.getSession().setAttribute(visitCountKey, visitCount);
     }
-    if (request.getSession().getAttribute("user_id") == null) {
-        title = "Hello stranger";
-    } else {
-        title = "Hello" + request.getSession().getAttribute("user_id");
-    }
-    greeting += title;
     visitCount = (Integer) request.getSession().getAttribute(visitCountKey);
     visitCount = visitCount + 1;
-    userID = (String) request.getSession().getAttribute(userIDKey);
-    request.getSession().setAttribute(visitCountKey, visitCount);
 %>
 <!DOCTYPE html>
 <html>
@@ -39,47 +23,31 @@
         <title>Sharing Unwanted</title>
     </head>
     <body>
-        <jsp:useBean id="user" class="beans.UserBean" scope="request">
-            <jsp:setProperty name="user" 
-                             property="id"
-                             value = "guest"/>
-            <jsp:setProperty name="user" 
-                             property="name"
-                             value = "Guest"/>
-            <jsp:setProperty name="user" 
-                             property="pwd"
-                             value = "undefined"/>
-            <jsp:setProperty name="user" 
-                             property="share"
-                             value = "0"/>
-            <jsp:setProperty name="user" 
-                             property="use"
-                             value = "0"/>
-        </jsp:useBean>
+
 
         <h3>Hello, welcome to Sharing unwanted. A place for people to share items for free</h3>
-
-
+        
         <h1>Login</h1>
-        <%@ page import = "javax.servlet.RequestDispatcher" %>
-        <%
-            RequestDispatcher dispatcher;
-            String name = request.getParameter("name");
-            String pwd = request.getParameter("pwd");
-            if (name == null || pwd == null) {
-                name = "";
-                pwd = "";
-            }
-            if (name.length() > 0 && pwd.length() > 0) {
-                dispatcher = getServletContext().getRequestDispatcher("/servlet/LogonServlet");
-            }
-        %>
+        
 
-        <form action="http://localhost:8080/MultiTier/LogonServlet">
-            <p> ID <input type="text" name="usr_id" maxlength="25" size="26" required></p>
-            <p> Password <input type="password" name="usr_pwd" maxlength="16" size="17" required></p>
+        <form id="log_submit" action="http://localhost:8080/MultiTier/LoginServlet" 
+              onsubmit="return validateForm()">
+            <p> ID <input type="text" name="id" maxlength="25" size="26"></p>
+            <p> Password <input type="password" name="pwd" maxlength="16" size="17"></p>
             <input type="submit" value="Login">
         </form>
+
+        <script>
+            function validateForm() {
+                var x = document.forms["log_submit"]["id"].value;
+                var y = document.forms["log_submit"]["pwd"].value;
+                if (x === "" || y === "") {
+                    alert("You must have Username and password");
+                    return false;
+                }
+            }
+        </script>
+
 
         <p>Session ID: <% out.print(request.getSession().getId()); %></p>
         <p>Created time: <% out.print(createTime); %></p>

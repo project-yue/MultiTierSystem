@@ -25,9 +25,9 @@ public class UserDatabase {
 
     private final String URL = "jdbc:derby://localhost:1527/ass1DB;create=true";
     private final String USR_TBL = "DB_User";
-    private final String[] USR_TBL_ATTRIBUTES = {"USER_ID", "USER_NAME", "USER_PWD", "SHARED", "USED"};
+    private final String[] USR_TBL_ATTRIBUTES = {"USER_ID", "USER_NAME", "USER_PWD", "SHARED", "USED", "ADDRESS"};
     private final String ITEM_TBL = "DB_Item";
-    private final String[] ITEM_TBL_ATTRIBUTES = {"ITEM_ID", "ITEM_NAME", "HEAT", "AVAILABLE"};
+    private final String[] ITEM_TBL_ATTRIBUTES = {"ITEM_ID", "ITEM_NAME", "HEAT", USR_TBL_ATTRIBUTES[0]};
     private Connection conn;
 
     public static void main(String[] args) {
@@ -48,10 +48,11 @@ public class UserDatabase {
         String[] test = db.getUserTradeRecords("hello");
         System.out.println("Hello! " + test[1] + ", You have shared " + test[4]
                 + " , and used " + test[3] + "item(s)");
-        db.addNewItem("re", true);
-        db.incrementUserAttribute("hello", "SHARED");
-        db.disableItemAvailability(1);
-        db.enableItemAvailability(1);
+        db.addNewItem("re");
+        db.incrementUserAttribute("1", "SHARED");
+        db.assginItemTo(1, "1");
+        db.unassignItemFrom(1);
+//        db.assginItemTo(1);
         db.getItemRecords(1);
         db.increaseItemHeatByOne(1);
     }
@@ -90,7 +91,8 @@ public class UserDatabase {
                     + " VARCHAR(25) NOT NULL, " + this.USR_TBL_ATTRIBUTES[1] + " VARCHAR(30),"
                     + " " + this.USR_TBL_ATTRIBUTES[2] + " VARCHAR(16) NOT NULL,"
                     + " " + this.USR_TBL_ATTRIBUTES[3] + " INTEGER, " + this.USR_TBL_ATTRIBUTES[4]
-                    + " INTEGER," + " PRIMARY KEY (" + this.USR_TBL_ATTRIBUTES[0] + "))";
+                    + " INTEGER," + " " + this.USR_TBL_ATTRIBUTES[5] + " VARCHAR(64),"
+                    + " PRIMARY KEY (" + this.USR_TBL_ATTRIBUTES[0] + "))";
             statement.executeUpdate(sqlCreate);
             System.out.println("User Table created");
         } catch (SQLException ex) {
@@ -99,13 +101,14 @@ public class UserDatabase {
     }
 
     private void createItemTable() {
+        //"ITEM_ID", "ITEM_NAME", "HEAT", "AVAILABLE"
         try {
             Statement statement = conn.createStatement();
             String sqlCreate = "CREATE TABLE " + this.ITEM_TBL + "(" + this.ITEM_TBL_ATTRIBUTES[0]
                     + " INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
                     + " " + this.ITEM_TBL_ATTRIBUTES[1] + " VARCHAR(30) NOT NULL ," + this.ITEM_TBL_ATTRIBUTES[2]
-                    + " INTEGER, " + this.ITEM_TBL_ATTRIBUTES[3] + " BOOLEAN, " + this.USR_TBL_ATTRIBUTES[0]
-                    + " VARCHAR(25), " + " CONSTRAINT primary_key PRIMARY KEY (" + this.ITEM_TBL_ATTRIBUTES[0] + "))";
+                    + " INTEGER, " + this.ITEM_TBL_ATTRIBUTES[3] + " VARCHAR(25), "
+                    + " PRIMARY KEY (" + this.ITEM_TBL_ATTRIBUTES[0] + "))";
             statement.executeUpdate(sqlCreate);
             System.out.println("Item table created");
         } catch (SQLException ex) {
@@ -206,13 +209,17 @@ public class UserDatabase {
      * @param pwd the password of the account to be inserted
      */
     public void addNewUser(String userId, String userName, String pwd) {
+//        "USER_ID", "USER_NAME", "USER_PWD", "SHARED", "USED", "ADDRESS"
         try {
-            Statement statement = conn.createStatement();
-            String sqlUpdate = "INSERT INTO " + this.USR_TBL + " values("
-                    + "'" + userId + "', '" + userName + "', '" + pwd
-                    + "', " + "0, " + "0)";
-            statement.executeUpdate(sqlUpdate);
-            statement.close();
+            try (Statement statement = conn.createStatement()) {
+                String sqlUpdate = "INSERT INTO " + this.USR_TBL + "("
+                        + this.USR_TBL_ATTRIBUTES[0] + "," + this.USR_TBL_ATTRIBUTES[1]
+                        + " ," + this.USR_TBL_ATTRIBUTES[2] + ", "
+                        + this.USR_TBL_ATTRIBUTES[3] + ", " + this.USR_TBL_ATTRIBUTES[4] + ")"
+                        + " values( '" + userId + "', '" + userName + "', '" + pwd
+                        + "', " + "0, " + "0)";
+                statement.executeUpdate(sqlUpdate);
+            }
             System.out.println("new user: " + userId + " added");
         } catch (SQLException ex) {
             Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
@@ -220,32 +227,36 @@ public class UserDatabase {
     }
 
     public List<ItemBean> getAvailableItemsList() throws Exception {
+//        "ITEM_ID", "ITEM_NAME", "HEAT", "AVAILABLE"
         List<ItemBean> result = new ArrayList<>();
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("select * from " + this.ITEM_TBL
-                + " where " + this.ITEM_TBL_ATTRIBUTES[3] + " = TRUE");
+                + " where " + this.ITEM_TBL_ATTRIBUTES[3] + " IS NULL");
         while (rs.next()) {
             ItemBean ib = new ItemBean();
             ib.setId(rs.getString(this.ITEM_TBL_ATTRIBUTES[0]));
             ib.setName(rs.getString(this.ITEM_TBL_ATTRIBUTES[1]));
             ib.setHeat(rs.getInt(this.ITEM_TBL_ATTRIBUTES[2]));
-            ib.setAvailable(rs.getBoolean(this.ITEM_TBL_ATTRIBUTES[3]));
+            ib.setAvailable(rs.getString(this.ITEM_TBL_ATTRIBUTES[3]));
             result.add(ib);
         }
         return result;
     }
 
     public List<ItemBean> getUserItemsList(String userId) throws Exception {
+//        "ITEM_ID", "ITEM_NAME", "HEAT", "AVAILABLE"
         List<ItemBean> result = new ArrayList<>();
         Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("select * from " + this.ITEM_TBL
-                + " where " + USR_TBL_ATTRIBUTES[0] + "=\'" + userId + "\'");
+        String query = "select * from " + this.ITEM_TBL
+                + " where " + ITEM_TBL_ATTRIBUTES[3] + "= \'" + userId + "\'";
+        System.out.println("user item list query " + query);
+        ResultSet rs = stmt.executeQuery(query);
         while (rs.next()) {
             ItemBean ib = new ItemBean();
             ib.setId(rs.getString(this.ITEM_TBL_ATTRIBUTES[0]));
             ib.setName(rs.getString(this.ITEM_TBL_ATTRIBUTES[1]));
             ib.setHeat(rs.getInt(this.ITEM_TBL_ATTRIBUTES[2]));
-            ib.setAvailable(rs.getBoolean(this.ITEM_TBL_ATTRIBUTES[3]));
+            ib.setAvailable(rs.getString(this.ITEM_TBL_ATTRIBUTES[3]));
             result.add(ib);
         }
         return result;
@@ -256,12 +267,14 @@ public class UserDatabase {
         String query = "SELECT " + "*"
                 + " from " + this.USR_TBL + " where "
                 + this.USR_TBL_ATTRIBUTES[0] + " = '" + id + "'";
+        System.out.println("retrieving user record: " + query);
         try {
             Statement statement = this.conn.createStatement();
             ResultSet rs = statement.executeQuery(query);
             if (rs.next()) {
                 record[0] = rs.getString(this.USR_TBL_ATTRIBUTES[0]);
                 record[1] = rs.getString(this.USR_TBL_ATTRIBUTES[1]);
+                record[2] = rs.getString(this.USR_TBL_ATTRIBUTES[2]);
                 record[3] = Integer.toString(rs.getInt(this.USR_TBL_ATTRIBUTES[3]));
                 record[4] = Integer.toString(rs.getInt(this.USR_TBL_ATTRIBUTES[4]));
             }
@@ -280,8 +293,10 @@ public class UserDatabase {
      */
     public void incrementUserAttribute(String userId, String attribute) {
         String[] record = getUserTradeRecords(userId);
+        System.out.println("retrieved user record: " + record[0] + " " + record[1] + " " + record[2]
+                + " " + record[3] + " " + record[4]);
         int currentValue;
-        //"USER_ID", "USER_NAME", "USER_PWD", "SHARED", "USED"
+        //"USER_ID", "USER_NAME", "USER_PWD", "SHARED", "USED", "ADDRESS"
         boolean isShared = attribute.equalsIgnoreCase(this.USR_TBL_ATTRIBUTES[3]);
         //  pass string to validate whether it is a shared or used attribute
         if (isShared) {
@@ -300,7 +315,7 @@ public class UserDatabase {
             }
             sqlUpdate += " = " + currentValue + " WHERE "
                     + this.USR_TBL_ATTRIBUTES[0] + " = '" + userId + "'";
-            System.out.println(sqlUpdate);
+            System.out.println("increase attribute " + sqlUpdate);
             st.executeUpdate(sqlUpdate);
         } catch (SQLException ex) {
             Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
@@ -314,6 +329,7 @@ public class UserDatabase {
         String query = "SELECT " + "*"
                 + " from " + this.ITEM_TBL + " where "
                 + this.ITEM_TBL_ATTRIBUTES[0] + " = " + id;
+        System.out.println("selesct records " + query);
         try {
             Statement statement = this.conn.createStatement();
             ResultSet rs = statement.executeQuery(query);
@@ -321,7 +337,7 @@ public class UserDatabase {
                 record[0] = rs.getString(this.ITEM_TBL_ATTRIBUTES[0]);
                 record[1] = rs.getString(this.ITEM_TBL_ATTRIBUTES[1]);
                 record[2] = Integer.toString(rs.getInt(this.ITEM_TBL_ATTRIBUTES[2]));
-                record[3] = Boolean.toString(rs.getBoolean(this.ITEM_TBL_ATTRIBUTES[2]));
+                record[3] = (rs.getString(this.ITEM_TBL_ATTRIBUTES[3]));
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
@@ -330,38 +346,40 @@ public class UserDatabase {
         return record;
     }
 
-    public void addNewItem(String name, boolean available) {
+    public void addNewItem(String name) {
+//        "ITEM_ID", "ITEM_NAME", "HEAT", "AVAILABLE"
         try {
             try (Statement statement = conn.createStatement()) {
-                String sqlUpdate = "INSERT INTO " + this.ITEM_TBL + " (" + this.ITEM_TBL_ATTRIBUTES[1] + ", "
-                        + this.ITEM_TBL_ATTRIBUTES[3] + ")"
-                        + " values('" + name + "'," + true + ")";
+                String sqlUpdate = "INSERT INTO " + this.ITEM_TBL + " (" + this.ITEM_TBL_ATTRIBUTES[1] + ")"
+                        + " values('" + name + "'" + ")";
+                System.out.println("added item: " + sqlUpdate);
                 statement.executeUpdate(sqlUpdate);
             }
-            System.out.println("new item: " + name + " added");
         } catch (SQLException ex) {
             Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void enableItemAvailability(int id) {
+    public void assginItemTo(int item_id, String usr_id) {
         try (Statement statement = conn.createStatement()) {
 //            "ITEM_ID", "ITEM_NAME", "HEAT", "AVAILABLE"
             String sqlUpdate = "UPDATE " + this.ITEM_TBL + " SET "
-                    + this.ITEM_TBL_ATTRIBUTES[3] + " = " + true
-                    + " WHERE " + this.ITEM_TBL_ATTRIBUTES[0] + " = " + id;
+                    + this.ITEM_TBL_ATTRIBUTES[3] + " = '" + usr_id
+                    + "' WHERE " + this.ITEM_TBL_ATTRIBUTES[0] + " = " + item_id;
             statement.executeUpdate(sqlUpdate);
+            System.out.println("Assign item " + sqlUpdate);
         } catch (SQLException ex) {
             Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void disableItemAvailability(int id) {
+    public void unassignItemFrom(int item_id) {
         try (Statement statement = conn.createStatement()) {
 //            "ITEM_ID", "ITEM_NAME", "HEAT", "AVAILABLE"
             String sqlUpdate = "UPDATE " + this.ITEM_TBL + " SET "
-                    + this.ITEM_TBL_ATTRIBUTES[3] + " = " + false
-                    + " WHERE " + this.ITEM_TBL_ATTRIBUTES[0] + " = " + id;
+                    + this.ITEM_TBL_ATTRIBUTES[3] + " = " + null
+                    + " WHERE " + this.ITEM_TBL_ATTRIBUTES[0] + " = " + item_id;
+            System.out.println("unassign item " + sqlUpdate);
             statement.executeUpdate(sqlUpdate);
         } catch (SQLException ex) {
             Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);
@@ -377,6 +395,7 @@ public class UserDatabase {
             String sqlUpdate = "UPDATE " + this.ITEM_TBL + " SET "
                     + this.ITEM_TBL_ATTRIBUTES[2] + " = " + val
                     + " WHERE " + this.ITEM_TBL_ATTRIBUTES[0] + " = " + id;
+            System.out.println("increase heat " + sqlUpdate);
             statement.executeUpdate(sqlUpdate);
         } catch (SQLException ex) {
             Logger.getLogger(UserDatabase.class.getName()).log(Level.SEVERE, null, ex);

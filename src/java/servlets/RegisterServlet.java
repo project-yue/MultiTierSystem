@@ -1,16 +1,14 @@
+package servlets;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlets;
-
 import beans.UserBean;
 import database.UserDatabase;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author yue
  */
-public class RegistrationServlet extends HttpServlet {
+public class RegisterServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,35 +31,35 @@ public class RegistrationServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        register(request, response);
-    }
-    
-    private void register(HttpServletRequest request, HttpServletResponse response) {
         UserDatabase db = new UserDatabase();
         db.establishConnection();
         boolean isAccountUsed = db.doesAccountExist(request.getParameter("id"));
-        try {
-            PrintWriter out = response.getWriter();
-            
+        if (isAccountUsed) {
+            getServletContext().getRequestDispatcher("/login_failure.jsp").forward(request, response);
+        } else if (request.getAttribute("id") != null) {
+            isAccountUsed = db.doesAccountExist(request.getAttribute("id").toString());
             if (isAccountUsed) {
-                out.println("<p>ID: " + request.getParameter("id")
-                        + " has be taken. Please try a different id</p>");
-                out.println("<p><a HREF=\"/MultiTier/index.jsp\">Back to home</a></p>");
-                out.println("<p><a HREF=\"/MultiTier/register.jsp\">Register Again</a></p>");
-            } else {
-                db.addNewUser(request.getParameter("id"), request.getParameter("name"), request.getParameter("pwd"));
-                UserBean ub = (UserBean) request.getSession().getAttribute("user");
-                ub.setId(request.getParameter("id"));
-                ub.setName(request.getParameter("name"));
-                ub.setPwd(request.getParameter("pwd"));
-                request.getSession().setAttribute("user", ub);
-                getServletContext().getRequestDispatcher("/LogonServlet").
-                        forward(request, response);
+                getServletContext().getRequestDispatcher("/login_failure.jsp").forward(request, response);
             }
-            
-        } catch (IOException | ServletException ex) {
-            Logger.getLogger(RegistrationServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
+        db.addNewUser(request.getParameter("id"), request.getParameter("name"), request.getParameter("pwd"));
+        UserBean ub = (UserBean) request.getSession().getAttribute("user");
+        ub.setId(request.getParameter("id"));
+        ub.setName(request.getParameter("name"));
+        ub.setPwd(request.getParameter("pwd"));
+        request.getSession().setAttribute("user", ub);
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            out.print("<html>");
+            out.print("<head>");
+            out.print("</head>");
+            out.print("<body>");
+            out.print("<p>Registration success</p>");
+            out.print("<a HREF=\"/MultiTier/index.jsp\">Back to home</a>");
+            out.print("</body>");
+            out.print("</html>");
+        }
+//        request.getRequestDispatcher("/items_list.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

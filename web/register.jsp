@@ -14,9 +14,14 @@ registered, and show the items list
     </head>
     <body>
         <h1>Registration</h1>
+        <%@page import="beans.UserBean" %>
+        <%
+            UserBean ub = (UserBean) request.getSession().getAttribute("user");
+            
+        %>
 
-
-        <form action="http://localhost:8080/MultiTier/RegistrationServlet">
+        <form name="regi_submit" action="http://localhost:8080/MultiTier/RegisterServlet"
+              onsubmit="return validateForm()" >
             <p>ID:
                 <input type="text" name="id" maxlength="25" size="26" required></p>
             <p>name:
@@ -25,6 +30,16 @@ registered, and show the items list
                 <input type="password" name="pwd" maxlength="16" size="17" required></p>
             <input type="submit" value="Register">
         </form>
+
+        <script>
+            function validateForm() {
+                var x = document.forms["regi_submit"]["id"].value;
+                if (x === "guest") {
+                    alert("guest is reserved");
+                    return false;
+                }
+            }
+        </script>
 
         <p><a HREF="/MultiTier/index.jsp">Back to home</a></p>
 

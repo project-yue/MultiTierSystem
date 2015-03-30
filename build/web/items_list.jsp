@@ -20,7 +20,7 @@
     <body>
 
         <h3>Hello, welcome to Sharing unwanted. A place for people to share items for free</h3>
-
+        <%@page import="java.io.*, java.util.*, beans.UserBean, database.UserDatabase"%>
         <h4>
             Hello, <jsp:getProperty name="user" property="name"/> 
             (<jsp:getProperty name="user" property="id" />)<br/>
@@ -29,7 +29,18 @@
         <p>You have shared <jsp:getProperty name="user" property="share" />,
             and used <jsp:getProperty name="user" property="use" /> items
         </p>
-        <p><a HREF="/MultiTier/index.jsp">Return</a></p>
+        <form action="http://localhost:8080/MultiTier/CommandsServlet">
+            <select name="select_">
+                <option value="list">List Item</option>
+                <option value="return">Return Item</option>
+                <option value="use">Use Item</option>
+            </select>
+            <input type="text" name="select_input">
+            <input type="submit" />
+        </form>
+        <p><a HREF="/MultiTier/index.jsp">
+                <% request.getSession().invalidate(); %>
+                Logout</a></p>
         <table border="1">        
             <tr>
             <tr>
