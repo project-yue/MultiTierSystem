@@ -60,7 +60,6 @@ public class CommandsServlet extends HttpServlet {
                 String task1 = request.getParameter("select_input");
                 udb.addNewItem(task1);
                 udb.incrementUserAttribute(usr, "SHARED");
-//                response.sendRedirect("task_complete.jsp");
                 dbUpdate(request, udb, cookieLst, results);
                 request.getRequestDispatcher("/login_success.jsp").forward(request, response);
                 break;
@@ -68,7 +67,6 @@ public class CommandsServlet extends HttpServlet {
                 // num
                 String task2 = request.getParameter("select_input");
                 udb.unassignItemFrom(Integer.parseInt(task2));
-//                response.sendRedirect("task_complete.jsp");
                 dbUpdate(request, udb, cookieLst, results);
                 request.getRequestDispatcher("/login_success.jsp").forward(request, response);
                 break;
@@ -83,7 +81,6 @@ public class CommandsServlet extends HttpServlet {
                     udb.incrementUserAttribute(usr, "USED");
                     dbUpdate(request, udb, cookieLst, results);
                     request.getRequestDispatcher("/login_success.jsp").forward(request, response);
-//                    response.sendRedirect("task_complete.jsp");
                 }
                 break;
             default:

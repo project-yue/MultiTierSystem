@@ -5,7 +5,6 @@
  */
 package servlets;
 
-import beans.UserBean;
 import database.UserDatabase;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -85,7 +84,7 @@ public class LoginServlet extends HttpServlet {
         if (request.getAttribute("id") != null) {
             String id = request.getAttribute("id").toString();
             String pwd = request.getAttribute("pwd").toString();
-            
+
         } else if (request.getParameter("id") != null
                 && udb.doesAccountExist(request.getParameter("id"))
                 && udb.matchPasswords(request.getParameter("pwd"), request.getParameter("id"))) {

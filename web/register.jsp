@@ -14,11 +14,6 @@ registered, and show the items list
     </head>
     <body>
         <h1>Registration</h1>
-        <%@page import="beans.UserBean" %>
-        <%
-            UserBean ub = (UserBean) request.getSession().getAttribute("user");
-            
-        %>
 
         <form name="regi_submit" action="http://localhost:8080/MultiTier/RegisterServlet"
               onsubmit="return validateForm()" >

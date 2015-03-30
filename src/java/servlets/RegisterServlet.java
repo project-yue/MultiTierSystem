@@ -43,7 +43,7 @@ public class RegisterServlet extends HttpServlet {
             }
         }
         db.addNewUser(request.getParameter("id"), request.getParameter("name"), request.getParameter("pwd"));
-        UserBean ub = (UserBean) request.getSession().getAttribute("user");
+        UserBean ub = new UserBean();
         ub.setId(request.getParameter("id"));
         ub.setName(request.getParameter("name"));
         ub.setPwd(request.getParameter("pwd"));

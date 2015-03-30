@@ -27,8 +27,6 @@
         <%
             // set up user bean
             UserBean eb = new UserBean();
-//            UserBean eb = (UserBean) request.getAttribute("user");
-            // session is at index 0
             ArrayList<Cookie> cookieLst = (ArrayList<Cookie>) request.getAttribute("cookies");
             eb.setId(cookieLst.get(0).getValue());
             eb.setName(cookieLst.get(1).getValue());
