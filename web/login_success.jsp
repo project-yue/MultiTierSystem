@@ -46,7 +46,7 @@
             You have shared <jsp:getProperty name="user" property="share" />,
             and used <jsp:getProperty name="user" property="use" /> items
         </p>
-        <form action="http://localhost:8080/MultiTier/CommandsServlet">
+        <form action="http://localhost:8080/SharedUnwanted/CommandsServlet">
             <select name="select_">
                 <option value="list">List Item</option>
                 <option value="return">Return Item</option>
@@ -58,7 +58,7 @@
             <input type="submit" />
         </form>
         <p>
-            <a HREF="/MultiTier/index.jsp">
+            <a HREF="/SharedUnwanted/index.jsp">
                 <% request.getSession().invalidate();%>
                 Logout</a>
         </p>
@@ -69,7 +69,7 @@
             </tr>
             <tr>
                 <td colspan="4" align="center">
-                    <form action=http://localhost:8080/MultiTier/RegistrationServlet>
+                    <form action=http://localhost:8080/SharedUnwanted/RegistrationServlet>
                         <input type="text" required> 
                         <input type="submit" value="Acquire">
                     </form>
@@ -97,7 +97,7 @@
             </tr>
             <tr>
                 <td colspan="4" align="center">
-                    <form action="http://localhost:8080/MultiTier/RegistrationServlet">
+                    <form action="http://localhost:8080/SharedUnwanted/RegistrationServlet">
                         <input type="text" required> 
                         <input type="submit"value="Return!">
                     </form>

@@ -52,7 +52,6 @@ public class UserDatabase {
         db.incrementUserAttribute("1", "SHARED");
         db.assginItemTo(1, "1");
         db.unassignItemFrom(1);
-//        db.assginItemTo(1);
         db.getItemRecords(1);
         db.increaseItemHeatByOne(1);
     }

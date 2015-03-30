@@ -111,10 +111,10 @@ public class LoginServlet extends HttpServlet {
                 request.setAttribute("under_use_list", udb.getUserItemsList(request.getParameter("id")));
                 request.setAttribute("cookies", cookieLst);
             } catch (Exception ex) {
-                Logger.getLogger(LogonServlet.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
             try {
-                request.getRequestDispatcher("login_success.jsp").forward(request, response);
+                request.getRequestDispatcher("/login_success.jsp").forward(request, response);
             } catch (IOException | ServletException ex) {
                 Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
             }

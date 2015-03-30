@@ -97,7 +97,7 @@ public class CommandsServlet extends HttpServlet {
             request.setAttribute("id", results[0]);
             request.setAttribute("pwd", results[2]);
         } catch (Exception ex) {
-            Logger.getLogger(LogonServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

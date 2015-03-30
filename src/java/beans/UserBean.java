@@ -34,9 +34,7 @@ public class UserBean implements Serializable {
     }
 
     public void setName(String value) {
-        String oldValue = name;
         name = value;
-//        propertySupport.firePropertyChange(id, oldValue, name);
     }
 
     public String getPwd() {

@@ -15,7 +15,7 @@ registered, and show the items list
     <body>
         <h1>Registration</h1>
 
-        <form name="regi_submit" action="http://localhost:8080/MultiTier/RegisterServlet"
+        <form name="regi_submit" action="http://localhost:8080/SharedUnwanted/RegisterServlet"
               onsubmit="return validateForm()" >
             <p>ID:
                 <input type="text" name="id" maxlength="25" size="26" required></p>
@@ -36,7 +36,7 @@ registered, and show the items list
             }
         </script>
 
-        <p><a HREF="/MultiTier/index.jsp">Back to home</a></p>
+        <p><a HREF="/SharedUnwanted/index.jsp">Back to home</a></p>
 
     </body>
 </html>

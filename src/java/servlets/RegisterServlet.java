@@ -55,11 +55,10 @@ public class RegisterServlet extends HttpServlet {
             out.print("</head>");
             out.print("<body>");
             out.print("<p>Registration success</p>");
-            out.print("<a HREF=\"/MultiTier/index.jsp\">Back to home</a>");
+            out.print("<a HREF=\"/SharedUnwanted/index.jsp\">Back to home</a>");
             out.print("</body>");
             out.print("</html>");
         }
-//        request.getRequestDispatcher("/items_list.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
