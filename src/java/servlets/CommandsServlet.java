@@ -61,13 +61,18 @@ public class CommandsServlet extends HttpServlet {
                 udb.addNewItem(task1);
                 udb.incrementUserAttribute(usr, "SHARED");
                 dbUpdate(request, udb, cookieLst, results);
+                udb.closeConnections();
                 request.getRequestDispatcher("/login_success.jsp").forward(request, response);
                 break;
             case "return":
                 // num
                 String task2 = request.getParameter("select_input");
-                udb.unassignItemFrom(Integer.parseInt(task2));
+                String[] records = udb.getItemRecords(Integer.parseInt(task2));
+                if (records[0] != null && records[3].equals(usr)) {
+                    udb.unassignItemFrom(Integer.parseInt(task2));
+                }
                 dbUpdate(request, udb, cookieLst, results);
+                udb.closeConnections();
                 request.getRequestDispatcher("/login_success.jsp").forward(request, response);
                 break;
             case "use":
@@ -75,15 +80,17 @@ public class CommandsServlet extends HttpServlet {
                 String task3 = request.getParameter("select_input");
                 System.out.println("user id: " + usr);
                 String[] test = udb.getItemRecords(Integer.parseInt(task3));
-                if (test[0] != null) {
+                if (test[0] != null && test[3] == null) {
                     udb.assginItemTo(Integer.parseInt(task3), usr);
                     udb.increaseItemHeatByOne(Integer.parseInt(task3));
                     udb.incrementUserAttribute(usr, "USED");
-                    dbUpdate(request, udb, cookieLst, results);
-                    request.getRequestDispatcher("/login_success.jsp").forward(request, response);
                 }
+                dbUpdate(request, udb, cookieLst, results);
+                udb.closeConnections();
+                request.getRequestDispatcher("/login_success.jsp").forward(request, response);
                 break;
             default:
+                udb.closeConnections();
                 break;
         }
 

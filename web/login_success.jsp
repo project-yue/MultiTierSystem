@@ -46,6 +46,10 @@
             You have shared <jsp:getProperty name="user" property="share" />,
             and used <jsp:getProperty name="user" property="use" /> items
         </p>
+        <br/><br/>
+        <p>Instructions:</p>
+        <p><i>Please type in item name when "List Item" function selected.</i></p>
+        <p><i>Please type in item id number for "Return Item" and "User Item"</i></p>
         <form action="http://localhost:8080/SharedUnwanted/CommandsServlet">
             <select name="select_">
                 <option value="list">List Item</option>
@@ -64,21 +68,11 @@
         </p>
         <table border="1">        
             <tr>
-            <tr>
                 <td colspan="4" align="center">Available Items</td>
             </tr>
-            <tr>
-                <td colspan="4" align="center">
-                    <form action=http://localhost:8080/SharedUnwanted/RegistrationServlet>
-                        <input type="text" required> 
-                        <input type="submit" value="Acquire">
-                    </form>
-                </td>
-            </tr>
-            <th>ID</th>
-            <th>NAME</th>
-            <th> HEAT</th>
-            <th>AVAILABILITY</th>
+            <th> ID </th>
+            <th> NAME </th>
+            <th> HEAT </th>
                 <%
                     java.util.ArrayList<beans.ItemBean> availableRlts = (java.util.ArrayList<beans.ItemBean>) request.getAttribute("item_list");
                     for (ItemBean ib : availableRlts) {
@@ -86,7 +80,6 @@
                         out.print("<th>" + ib.getId() + "</th>");
                         out.print("<th>" + ib.getName() + "</th>");
                         out.print("<th>" + ib.getHeat() + "</th>");
-                        out.print("<th>" + ib.getAvailable() + "</th>");
                         out.print("</tr>");
                     }
                 %>
@@ -96,19 +89,9 @@
                 <td colspan="4" align="center">You are Using Below Items</td>
             </tr>
             <tr>
-                <td colspan="4" align="center">
-                    <form action="http://localhost:8080/SharedUnwanted/RegistrationServlet">
-                        <input type="text" required> 
-                        <input type="submit"value="Return!">
-                    </form>
-                </td>
-            </tr>
-
-            <tr>
                 <th> ID </th>
                 <th> NAME </th>
                 <th> HEAT</th>
-                <th> AVAILABILITY</th>
             </tr>
             <%
                 java.util.ArrayList<beans.ItemBean> usingRlts = (java.util.ArrayList<beans.ItemBean>) request.getAttribute("under_use_list");
@@ -117,7 +100,6 @@
                     out.print("<th>" + ib.getId() + "</th>");
                     out.print("<th>" + ib.getName() + "</th>");
                     out.print("<th>" + ib.getHeat() + "</th>");
-                    out.print("<th>" + ib.getAvailable() + "</th>");
                     out.print("</tr>");
                 }
             %>
